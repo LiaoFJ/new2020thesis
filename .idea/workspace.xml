@@ -15,7 +15,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/new2020thesis" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1eeX0hKY5exgZ9XTQ44hr0YaqIi" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -27,6 +27,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
@@ -94,6 +95,7 @@
       <workItem from="1594743243837" duration="12919000" />
       <workItem from="1594829068093" duration="2185000" />
       <workItem from="1594834339387" duration="206000" />
+      <workItem from="1594835212256" duration="90000" />
     </task>
     <servers />
   </component>
