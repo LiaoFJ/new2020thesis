@@ -45,6 +45,7 @@ class Final_model(nn.Module):
         x_model_4 = self.Draw_model_4(x_out_4)
         self.loss_4 = self.Draw_model_4.loss(x_out_4)
 
+
         x_model_out_3 = self.up_1(x_model_4, x_model_3)
         x_model_out_2 = self.up_2(x_model_out_3, x_model_2)
         x_model_out_1 = self.up_3(x_model_out_2, x_model_1)

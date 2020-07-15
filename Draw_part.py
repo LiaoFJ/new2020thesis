@@ -176,7 +176,7 @@ class DRAWModel(nn.Module):
             h_enc_prev = h_enc
             h_dec_prev = h_dec
 
-        return self.cs[-1]
+        return self.cs[-1].view(self.batch_size, self.channel, self.B, self.A)
 
 
     def loss(self, x):
@@ -213,4 +213,4 @@ class DRAWModel(nn.Module):
             h_dec, dec_state = self.decoder(z, (h_dec_prev, dec_state))
             self.cs[t] = c_prev + self.write(h_dec)
 
-        return self.cs[-1]
+        return self.cs[-1].view(self.batch_size, self.channel, self.B, self.A)
