@@ -32,13 +32,13 @@ class Final_model(nn.Module):
         batch_size = x.size(0)
         x = x.view(batch_size, 3, 120, 90)
         x_out_1 = self.inc(x)
-        print('x :', x.size())
+        # print('x :', x.size())
         x_out_2 = self.down_1(x_out_1)
         x_out_3 = self.down_2(x_out_2)
         x_out_4 = self.down_3(x_out_3)
 
         x_model_1 = self.Draw_model_1(x_out_1)
-        print('x_model_1 :', x_model_1.size())
+        # print('x_model_1 :', x_model_1.size())
         self.loss_1 = self.Draw_model_1.loss(x_out_1)
         x_model_2 = self.Draw_model_2(x_out_2)
         self.loss_2 = self.Draw_model_2.loss(x_out_2)
@@ -50,9 +50,9 @@ class Final_model(nn.Module):
 
         x_model_out_3 = self.up_1(x_model_4, x_model_3)
         x_model_out_2 = self.up_2(x_model_out_3, x_model_2)
-        print('x_', x_model_out_2.size())
+        # print('x_', x_model_out_2.size())
         x_model_out_1 = self.up_3(x_model_out_2, x_model_1)
-        print('x_out', x_model_out_1.size())
+        # print('x_out', x_model_out_1.size())
         x_model_output = self.OutConv(x_model_out_1)
 
         return x_model_output
