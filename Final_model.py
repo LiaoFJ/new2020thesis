@@ -10,17 +10,17 @@ class Final_model(nn.Module):
         :param size_b: height of image
         '''
         super().__init__()
-        self.inc = U.SingleConv(3, 32)
-        self.down_1 = U.down_conv(32, 64)
-        self.down_2 = U.down_conv(64, 128)
-        self.down_3 = U.down_conv(128, 256)
+        self.inc = U.SingleConv(3, 16)
+        self.down_1 = U.down_conv(16, 32)
+        self.down_2 = U.down_conv(32, 64)
+        self.down_3 = U.down_conv(64, 128)
 
 
-        self.up_1 = U.up_conv(256, 128)
-        self.up_2 = U.up_conv(128, 64)
-        self.up_3 = U.up_conv(64, 32)
+        self.up_1 = U.up_conv(128, 64)
+        self.up_2 = U.up_conv(64, 32)
+        self.up_3 = U.up_conv(32, 16)
 
-        self.OutConv = U.OutConv(32, 3)
+        self.OutConv = U.OutConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
         self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 15, 15, params)
         self.Draw_model_2 = D.DRAWModel(64, 57, 42, 32, 8, 8, params)
