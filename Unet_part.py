@@ -56,9 +56,9 @@ class OutConv(nn.Module):
         self.conv = nn.ConvTranspose2d(i_channels, o_channels, kernel_size=3, stride=1)
 
     def forward(self, x):
+        print(x.size())
         x = self.conv(x)
         print(x.size())
         x = x.view(x.size(0), -1)
-        print(x.size())
         return x
 
