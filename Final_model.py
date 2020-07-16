@@ -21,6 +21,7 @@ class Final_model(nn.Module):
         self.up_3 = U.up_conv(32, 16)
 
         self.OutConv = U.OutConv(16, 3)
+        self.FinalConv = U.FinalConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
         self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 15, 15, params)
         self.Draw_model_2 = D.DRAWModel(64, 57, 42, 32, 8, 8, params)
@@ -76,6 +77,5 @@ class Final_model(nn.Module):
         x_generate_mix_2 = self.up_2(x_generate_mix_3, x_generate_2)
         x_generate_mix_1 = self.up_3(x_generate_mix_2, x_generate_1)
 
-        img = self.OutConv(x_generate_mix_1)
-        print(img.size())
+        img = self.FinalConv(x_generate_mix_1)
         return img
