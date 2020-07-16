@@ -61,7 +61,7 @@ class Final_model(nn.Module):
         x_recon = self.forward(x)
         latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
         criterion = nn.MSELoss()
-        recon_loss = (criterion(x_recon, x) ** 2) * x.size()[1] * x.size()[2] * x.size()[3]
+        recon_loss = (criterion(x_recon, x) ** 2) * x.size(-1)
 
 
         return latent_loss + recon_loss
@@ -73,8 +73,8 @@ class Final_model(nn.Module):
         x_generate_1 = self.Draw_model_1.generate(num_output)
 
         x_generate_mix_3 = self.up_1(x_generate_4, x_generate_3)
-        x_generate_mix_2 = self.up_1(x_generate_mix_3, x_generate_2)
-        x_generate_mix_1 = self.up_1(x_generate_mix_2, x_generate_1)
+        x_generate_mix_2 = self.up_2(x_generate_mix_3, x_generate_2)
+        x_generate_mix_1 = self.up_3(x_generate_mix_2, x_generate_1)
 
         img = self.OutConv(x_generate_mix_1)
         return img
