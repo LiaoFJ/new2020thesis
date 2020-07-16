@@ -77,4 +77,5 @@ class Final_model(nn.Module):
         x_generate_mix_1 = self.up_3(x_generate_mix_2, x_generate_1)
 
         img = self.OutConv(x_generate_mix_1)
+        print(img.size())
         return img
