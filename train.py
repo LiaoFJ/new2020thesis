@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.animation as animation
 import time
 import torchvision.utils as vutils
-
+import torch.nn as nn
 from torchvision import datasets, transforms
 from Final_model import Final_model
 from dataloader import get_data
@@ -49,7 +49,9 @@ plt.imshow(np.transpose(vutils.make_grid(
 plt.savefig("Training_Data")
 
 # Initialize the model.
-model = Final_model(params)
+device = torch.device("cuda:0")
+model = Final_model(params).to(device)
+model = nn.DataParallel(model.cuda())
 
 # SGD Optimizer
 optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
@@ -78,7 +80,7 @@ for epoch in range(params['epoch_num']):
         data = data.view(bs, -1)
         optimizer.zero_grad()
         # Calculate the loss.
-        loss = model.loss(data)
+        loss = model.module.loss(data)
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
         # Calculate the gradients.
