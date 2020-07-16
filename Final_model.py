@@ -56,7 +56,7 @@ class Final_model(nn.Module):
         # print('x_out', x_model_out_1.size())
         x_model_output = self.OutConv(x_model_out_1)
 
-        return nn.Sigmoid(x_model_output)
+        return torch.sigmoid(x_model_output)
 
     def loss(self, x):
         x_recon = self.forward(x)
@@ -79,4 +79,4 @@ class Final_model(nn.Module):
 
         img = self.OutConv(x_generate_mix_1)
         img = img.view(img.size(0), 3, 90, 120)
-        return nn.Sigmoid(img)
+        return torch.sigmoid(img)

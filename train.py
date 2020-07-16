@@ -21,7 +21,6 @@ def generate_image(epoch):
     anim.save('draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
     plt.close('all')
 
-
 # Dictionary storing network parameters.
 params = {
     'batch_size': 128,  # Batch size.
@@ -38,11 +37,7 @@ params = {
     'mix_channel': 32,
             }  # Number of channels for image.(3 for RGB, etc.)
 
-
-
 train_loader = get_data(params)
-
-
 
 # Plot the training images.
 sample_batch = next(iter(train_loader))
@@ -55,9 +50,8 @@ plt.savefig("Training_Data")
 
 # Initialize the model.
 model = Final_model(params)
-# model = Model(3)
 
-# Adam Optimizer
+# SGD Optimizer
 optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
 
 # List to hold the losses for each iteration.
