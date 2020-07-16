@@ -37,7 +37,8 @@ params = {
     'mix_channel': 32,
             }  # Number of channels for image.(3 for RGB, etc.)
 
-
+#loader
+train_loader = get_data(params)
 
 # Plot the training images.
 sample_batch = next(iter(train_loader))
@@ -52,8 +53,7 @@ plt.savefig("Training_Data")
 device = torch.device("cuda:0")
 model = Final_model(params).to(device)
 model = nn.DataParallel(model.cuda())
-#loader
-train_loader = get_data(params)
+
 
 # SGD Optimizer
 optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
