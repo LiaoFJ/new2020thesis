@@ -50,12 +50,14 @@ plt.imshow(np.transpose(vutils.make_grid(
 plt.savefig("Training_Data")
 
 # Initialize the model.
-device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+# device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
 
-params['device'] = device
+device = torch.device("cpu")
+# params['device'] = device
 
-model = Final_model(params).to(device)
-model = nn.DataParallel(model.cuda())
+# model = Final_model(params).to(device)
+# model = nn.DataParallel(model.cuda())
+model = Final_model(params)
 
 
 # SGD Optimizer
