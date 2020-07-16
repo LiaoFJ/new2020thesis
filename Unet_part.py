@@ -5,14 +5,14 @@ import torch.nn.functional as F
 class SingleConv(nn.Module):
     def __init__(self, i_channels, o_channels):
         super().__init__()
-        self.doubleconv = nn.Sequential(
+        self.singleconv = nn.Sequential(
             nn.Conv2d(i_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
             nn.ReLU(inplace=True)
         )
 
     def forward(self, x):
-        return self.doubleconv(x)
+        return self.singleconv(x)
 
 class down_conv(nn.Module):
     def __init__(self, i_channels, o_channels):
