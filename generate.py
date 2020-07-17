@@ -32,7 +32,7 @@ print('*'*25)
 print("Generating Image...")
 # Generate images.
 with torch.no_grad():
-    x = model.module.generate(int(args.num_output))
+    x = model.generate(int(args.num_output))
 
 time_elapsed = time.time() - start_time
 print('\nDONE!')
