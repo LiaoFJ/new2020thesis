@@ -23,10 +23,10 @@ class Final_model(nn.Module):
         self.OutConv = U.OutConv(16, 3)
         # self.FinalConv = U.FinalConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 15, 15, params)
+        self.Draw_model_1 = D.DRAWModel(128, 118, 88, 16, 10, 10, params)
         self.Draw_model_2 = D.DRAWModel(64, 57, 42, 32, 8, 8, params)
         self.Draw_model_3 = D.DRAWModel(32, 26, 19, 64, 5, 5, params)
-        self.Draw_model_4 = D.DRAWModel(16, 11, 7, 128, 4, 4, params)
+        self.Draw_model_4 = D.DRAWModel(32, 11, 7, 128, 4, 4, params)
 
 
     def forward(self, x):
