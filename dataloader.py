@@ -28,3 +28,27 @@ def get_data(params):
         shuffle=True)
 
     return dataloader
+
+def get_data_for_test(params):
+    """
+    Loads the dataset and applies proproccesing steps to it.
+    Returns a PyTorch DataLoader.
+    """
+    # Data proprecessing.
+    transform = transforms.Compose([
+        transforms.Resize((30, 40)),
+        transforms.ToTensor()])
+
+    # Create the dataset.
+    dataset = dset.ImageFolder(root=root, transform=transform)
+    # dataset = dset.CIFAR10(
+    #     root = "./data/",
+    #     transform=transform,
+    #     download=True
+    # )
+    # Create the dataloader.
+    dataloader = torch.utils.data.DataLoader(dataset,
+        batch_size=params['batch_size'],
+        shuffle=True)
+    print(dataloader)
+    return dataloader

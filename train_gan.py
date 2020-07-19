@@ -10,8 +10,7 @@ from torchvision import datasets, transforms
 from Final_model import Final_model
 from dataloader import get_data
 import os
-import argparse
-
+from WGAN_part import Discriminator
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 # Function to generate new images and save the time-steps as an animation.
 def generate_image(epoch):
@@ -31,11 +30,13 @@ params = {
     # 'write_N': 5,  # N x N dimension of writing glimpse.
     'dec_size': 1000,  # Hidden dimension for decoder.
     'enc_size': 1000,  # Hidden dimension for encoder.
-    'epoch_num': 70,  # Number of epochs to train for.
+    'epoch_num': 200,  # Number of epochs to train for.
     'learning_rate': 2e-3,  # Learning rate.
+    'beta1': 0.5,
     'clip': 5.0,
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
     'mix_channel': 32,
+    'clip_D': 0.01
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
@@ -54,35 +55,13 @@ plt.savefig("Training_Data")
 # device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
 
 device = torch.device("cpu")
-# params['device'] = device
 
-# model = Final_model(params).to(device)
-# model = nn.DataParallel(model.cuda())
-
-#下面是被注释掉的最初的
-# model = Final_model(params)
-#
-# # SGD Optimizer
-
-
-
-#go on training
-parser = argparse.ArgumentParser()
-parser.add_argument('-load_path', default='./checkpoint/model_epoch_70.pkl', help='Checkpoint to load path from')
-args = parser.parse_args()
-# Load the checkpoint file.
-state_dict = torch.load(args.load_path)
-# Get the 'params' dictionary from the loaded state_dict.
-params = state_dict['params']
 model = Final_model(params)
-model.load_state_dict(state_dict['model'])
+model_D = Discriminator()
 
-print('load finished and then train')
-
-optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
-
-
-
+# RMSprop Optimizer
+optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])
+optimizer_D = optim.RMSprop(model_D.parameters(), lr = params['learning_rate'])
 # List to hold the losses for each iteration.
 # Used for plotting loss curve.
 losses = []
@@ -106,9 +85,15 @@ for epoch in range(params['epoch_num']):
         # Flatten the image.
         data = data.view(bs, -1).to(device)
         optimizer.zero_grad()
+        optimizer_D.zero_grad()
         # Calculate the loss.
         # loss = model.module.loss(data)
+
+
         loss = model.loss(data)
+        loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
+        loss_recon = 0.01 * model.recon_los(data) - loss_dis
+
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
         # Calculate the gradients.
@@ -116,6 +101,11 @@ for epoch in range(params['epoch_num']):
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         # Update parameters.
         optimizer.step()
+
+        loss_recon.backward()
+        loss_dis.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip_D'])
+        optimizer_D.step()
 
         # Check progress of training.
         if i != 0 and i % 100 == 0:
@@ -129,14 +119,15 @@ for epoch in range(params['epoch_num']):
 
     avg_loss = 0
     epoch_time = time.time() - epoch_start_time
-    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1 + 70, epoch_time))
+    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1, epoch_time))
     # Save checkpoint and generate test output.
     if (epoch + 1) % params['save_epoch'] == 0:
         torch.save({
             'model': model.state_dict(),
             'optimizer': optimizer.state_dict(),
-            'params': params
-        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1 + 70))
+            'params': params,
+            'model_D': model_D.state_dict()
+        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1))
 
         with torch.no_grad():
             generate_image(epoch + 1)
