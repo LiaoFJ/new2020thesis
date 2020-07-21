@@ -69,10 +69,10 @@ params['device'] = device
 #go on training
 parser = argparse.ArgumentParser()
 parser.add_argument('-load_path', default='./checkpoint/model_epoch_70.pkl', help='Checkpoint to load path from')
-parser.add_argument('-load_if', default='false')
+parser.add_argument('-load_if', default='False')
 args = parser.parse_args()
 
-if args.load_if :
+if args.load_if == True:
 
 
     # Load the checkpoint file.
