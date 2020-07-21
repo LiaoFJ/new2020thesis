@@ -54,7 +54,7 @@ plt.savefig("Training_Data")
 # device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
 
 device = torch.device("cpu")
-# params['device'] = device
+params['device'] = device
 
 # model = Final_model(params).to(device)
 # model = nn.DataParallel(model.cuda())
@@ -69,15 +69,24 @@ device = torch.device("cpu")
 #go on training
 parser = argparse.ArgumentParser()
 parser.add_argument('-load_path', default='./checkpoint/model_epoch_70.pkl', help='Checkpoint to load path from')
+parser.add_argument('-load_if', default='false')
 args = parser.parse_args()
-# Load the checkpoint file.
-state_dict = torch.load(args.load_path)
-# Get the 'params' dictionary from the loaded state_dict.
-params = state_dict['params']
-model = Final_model(params)
-model.load_state_dict(state_dict['model'])
 
-print('load finished and then train')
+if args.load_if :
+
+
+    # Load the checkpoint file.
+    state_dict = torch.load(args.load_path)
+
+
+    # Get the 'params' dictionary from the loaded state_dict.
+    params = state_dict['params']
+    model = Final_model(params)
+    model.load_state_dict(state_dict['model'])
+
+    print('load finished and then train')
+else:
+    model = Final_model(params).to(device)
 
 optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
 
