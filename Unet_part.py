@@ -55,21 +55,14 @@ class OutConv(nn.Module):
         super().__init__()
         self.conv = nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1)
         self.BN = nn.BatchNorm2d(o_channels)
+        self.relu = nn.ReLU(inplace=True)
     def forward(self, x):
         # print(x.size())
         x = self.conv(x)
         # print(x.size())
         x = self.BN(x)
+        x = self.relu(x)
         x = x.view(x.size(0), -1)
         return x
 
-class FinalConv(nn.Module):
-    def __init__(self, i_channels, o_channels):
-        super().__init__()
-        self.conv = nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1)
-        self.BN = nn.BatchNorm2d(o_channels)
-    def forward(self, x):
-        x = self.conv(x)
-        x = self.BN(x)
-        return x
 

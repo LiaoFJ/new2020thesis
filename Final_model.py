@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import Unet_part as U
 import Draw_part as D
-
+import torch.nn.functional as F
 class Final_model(nn.Module):
     def __init__(self, params):
         '''
@@ -23,10 +23,10 @@ class Final_model(nn.Module):
         self.OutConv = U.OutConv(16, 3)
         # self.FinalConv = U.FinalConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(128, 118, 88, 16, 10, 10, params)
-        self.Draw_model_2 = D.DRAWModel(128, 57, 42, 32, 8, 8, params)
-        self.Draw_model_3 = D.DRAWModel(128, 26, 19, 64, 5, 5, params)
-        self.Draw_model_4 = D.DRAWModel(64, 11, 7, 128, 4, 4, params)
+        self.Draw_model_1 = D.DRAWModel(16, 118, 88, 16, 7, 7, params)
+        self.Draw_model_2 = D.DRAWModel(16, 57, 42, 32, 7, 7, params)
+        self.Draw_model_3 = D.DRAWModel(16, 26, 19, 64, 7, 7, params)
+        self.Draw_model_4 = D.DRAWModel(16, 11, 7, 128, 7, 7, params)
 
 
     def forward(self, x):
@@ -54,18 +54,24 @@ class Final_model(nn.Module):
         # print('x_', x_model_out_2.size())
         x_model_out_1 = self.up_3(x_model_out_2, x_model_1)
         # print('x_out', x_model_out_1.size())
+        self.for_dis = x_model_out_1
         x_model_output = self.OutConv(x_model_out_1)
 
-        return torch.sigmoid(x_model_output)
+        return F.normalize(x_model_output)
 
     def loss(self, x):
         x_recon = self.forward(x)
         latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
         criterion = nn.MSELoss()
-        recon_loss = (criterion(x_recon, x) ** 2) * x.size(-1) * 100
+        recon_loss = (criterion(x_recon, x) ** 2) * x.size(-1) * 1000
 
 
         return latent_loss + recon_loss
+
+    def recon_los(self, x):
+        x_recon = self.forward(x)
+        criterion = nn.MSELoss()
+        return (criterion(x_recon, x) ** 2) * x.size(-1) * 1000
 
     def generate(self, num_output):
         x_generate_4 = self.Draw_model_4.generate(num_output)
@@ -79,4 +85,4 @@ class Final_model(nn.Module):
 
         img = self.OutConv(x_generate_mix_1)
         img = img.view(img.size(0), 3, 90, 120)
-        return torch.sigmoid(img)
+        return F.normalize(img)
