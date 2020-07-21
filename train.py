@@ -83,10 +83,11 @@ if args.load_if == True:
     params = state_dict['params']
     model = Final_model(params)
     model.load_state_dict(state_dict['model'])
-
+    step = state_dict['step']
     print('load finished and then train')
 else:
     model = Final_model(params).to(device)
+    step = 0
 
 optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
 
@@ -138,14 +139,15 @@ for epoch in range(params['epoch_num']):
 
     avg_loss = 0
     epoch_time = time.time() - epoch_start_time
-    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1 + 70, epoch_time))
+    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1, epoch_time))
     # Save checkpoint and generate test output.
     if (epoch + 1) % params['save_epoch'] == 0:
         torch.save({
             'model': model.state_dict(),
             'optimizer': optimizer.state_dict(),
-            'params': params
-        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1 + 70))
+            'params': params,
+            'step': epoch
+        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1))
 
         with torch.no_grad():
             generate_image(epoch + 1)
@@ -158,7 +160,8 @@ print("-" * 50)
 torch.save({
     'model': model.state_dict(),
     'optimizer': optimizer.state_dict(),
-    'params': params
+    'params': params,
+    'step': params['epoch_num']
 }, 'checkpoint/model_final.pkl'.format(epoch))
 
 # Generate test output.
