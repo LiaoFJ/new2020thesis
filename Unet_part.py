@@ -8,7 +8,7 @@ class SingleConv(nn.Module):
         self.singleconv = nn.Sequential(
             nn.Conv2d(i_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
-            nn.ReLU(inplace=True)
+
         )
 
     def forward(self, x):
@@ -55,13 +55,13 @@ class OutConv(nn.Module):
         super().__init__()
         self.conv = nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1)
         self.BN = nn.BatchNorm2d(o_channels)
-        self.relu = nn.ReLU(inplace=True)
+
     def forward(self, x):
         # print(x.size())
         x = self.conv(x)
         # print(x.size())
         x = self.BN(x)
-        x = self.relu(x)
+
         x = x.view(x.size(0), -1)
         return x
 

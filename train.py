@@ -31,7 +31,7 @@ params = {
     # 'write_N': 5,  # N x N dimension of writing glimpse.
     'dec_size': 100,  # Hidden dimension for decoder.
     'enc_size': 100,  # Hidden dimension for encoder.
-    'epoch_num': 200,  # Number of epochs to train for.
+    'epoch_num': 400,  # Number of epochs to train for.
     'learning_rate': 2e-3,  # Learning rate.
     'clip': 5.0,
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
@@ -89,7 +89,7 @@ else:
     model = Final_model(params).to(device)
     step = 0
 
-optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
+optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
 
 
 

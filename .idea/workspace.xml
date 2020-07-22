@@ -27,7 +27,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="D:/project_thesis/Generating-Devanagari-Using-DRAW-master/Generating-Devanagari-Using-DRAW" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.normal_vae">
@@ -143,7 +143,7 @@
       <workItem from="1594834339387" duration="206000" />
       <workItem from="1594835212256" duration="1234000" />
       <workItem from="1594837638042" duration="56164000" />
-      <workItem from="1595352941202" duration="6074000" />
+      <workItem from="1595352941202" duration="9491000" />
     </task>
     <servers />
   </component>
@@ -151,6 +151,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1595372341678">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1595372341678" />
     <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1595285054103">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

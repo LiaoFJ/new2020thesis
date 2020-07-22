@@ -57,12 +57,13 @@ class Final_model(nn.Module):
         self.for_dis = x_model_out_1
         x_model_output = self.OutConv(x_model_out_1)
 
-        return F.normalize(x_model_output)
+        return torch.sigmoid(x_model_output)
 
     def loss(self, x):
         x_recon = self.forward(x)
         latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
         criterion = nn.MSELoss()
+        print(x_recon.size())
         recon_loss = (criterion(x_recon, x) ** 2) * x.size(-1) * 100
 
 
@@ -85,4 +86,4 @@ class Final_model(nn.Module):
 
         img = self.OutConv(x_generate_mix_1)
         img = img.view(img.size(0), 3, 90, 120)
-        return F.normalize(img)
+        return torch.sigmoid(img)
