@@ -13,6 +13,7 @@ class SingleConv(nn.Module):
 
     def forward(self, x):
         return self.singleconv(x)
+#有些不一样的地方
 
 class down_conv(nn.Module):
     def __init__(self, i_channels, o_channels):

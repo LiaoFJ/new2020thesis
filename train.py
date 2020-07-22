@@ -68,7 +68,7 @@ params['device'] = device
 
 #go on training
 parser = argparse.ArgumentParser()
-parser.add_argument('-load_path', default='./checkpoint/model_epoch_70.pkl', help='Checkpoint to load path from')
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
 parser.add_argument('-load_if', default='False')
 args = parser.parse_args()
 
@@ -139,7 +139,7 @@ for epoch in range(params['epoch_num']):
 
     avg_loss = 0
     epoch_time = time.time() - epoch_start_time
-    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1, epoch_time))
+    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1 + step, epoch_time))
     # Save checkpoint and generate test output.
     if (epoch + 1) % params['save_epoch'] == 0:
         torch.save({
@@ -147,7 +147,7 @@ for epoch in range(params['epoch_num']):
             'optimizer': optimizer.state_dict(),
             'params': params,
             'step': epoch
-        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1))
+        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1 + step))
 
         with torch.no_grad():
             generate_image(epoch + 1)
