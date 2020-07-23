@@ -89,7 +89,7 @@ else:
     model = Final_model(params).to(device)
     step = 0
 
-optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])
+optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
 
 
 

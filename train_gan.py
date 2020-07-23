@@ -25,11 +25,11 @@ def generate_image(epoch):
 # Dictionary storing network parameters.
 params = {
     'batch_size': 32,  # Batch size.
-    'z_size': 500,  # Dimension of latent space.
+    'z_size': 50,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
-    'dec_size': 1000,  # Hidden dimension for decoder.
-    'enc_size': 1000,  # Hidden dimension for encoder.
+    'dec_size': 100,  # Hidden dimension for decoder.
+    'enc_size': 100,  # Hidden dimension for encoder.
     'epoch_num': 200,  # Number of epochs to train for.
     'learning_rate': 2e-3,  # Learning rate.
     'beta1': 0.5,
