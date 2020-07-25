@@ -25,8 +25,8 @@ class Final_model(nn.Module):
         #glimpses, width, heights, channels, read_N, write_N
         self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 12, 12, params)
         self.Draw_model_2 = D.DRAWModel(32, 57, 42, 32, 7, 7, params)
-        self.Draw_model_3 = D.DRAWModel(32, 26, 19, 64, 7, 7, params)
-        self.Draw_model_4 = D.DRAWModel(32, 11, 7, 128, 3, 3, params)
+        self.Draw_model_3 = D.DRAWModel(16, 26, 19, 64, 7, 7, params)
+        self.Draw_model_4 = D.DRAWModel(16, 11, 7, 128, 3, 3, params)
 
 
     def forward(self, x):
@@ -63,9 +63,7 @@ class Final_model(nn.Module):
         x_recon = self.forward(x)
         latent_loss = self.loss_1  + self.loss_2  + self. loss_3  + self.loss_4
         criterion = nn.MSELoss()
-        print(x_recon.size())
-        print(('exp', x_recon.size(-1)))
-        recon_loss = (criterion(x_recon, x) ** 2) * 32400
+        recon_loss = (criterion(x_recon, x) ** 2) * x_recon.size(-1) *100
 
 
         return latent_loss + recon_loss
