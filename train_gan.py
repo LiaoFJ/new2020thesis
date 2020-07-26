@@ -97,12 +97,12 @@ for epoch in range(params['epoch_num']):
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
         # Calculate the gradients.
-        loss.backward()
+        loss.backward(retain_graph=True)
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         # Update parameters.
         optimizer.step()
 
-        loss_recon.backward()
+        loss_recon.backward(retain_graph=True)
         loss_dis.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip_D'])
         optimizer_D.step()
