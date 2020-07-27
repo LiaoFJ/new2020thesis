@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.animation as animation
 import time
 import torchvision.utils as vutils
+import argparse
 import torch.nn as nn
 from torchvision import datasets, transforms
 from Final_model import Final_model
@@ -56,6 +57,36 @@ plt.savefig("Training_Data")
 
 device = torch.device("cpu")
 
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
+parser.add_argument('-load_if', default='False')
+args = parser.parse_args()
+
+if args.load_if == True:
+
+
+    # Load the checkpoint file.
+    state_dict = torch.load(args.load_path)
+
+
+    # Get the 'params' dictionary from the loaded state_dict.
+    params = state_dict['params']
+    model = Final_model(params)
+    model.load_state_dict(state_dict['model'])
+    model_D = Discriminator()
+    model_D.load_state_dict(state_dict['model_D'])
+    step = state_dict['step']
+    print('load finished and then train')
+else:
+    model = Final_model(params).to(device)
+    model_D = Discriminator()
+    step = 0
+
+
+
 model = Final_model(params)
 model_D = Discriminator()
 
@@ -92,17 +123,18 @@ for epoch in range(params['epoch_num']):
 
         loss = model.loss(data)
         loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
-        loss_recon = 0.01 * model.recon_los(data) - loss_dis
+        loss_recon = 0.00005 * model.recon_los(data) - loss_dis
 
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
+
+        
         # Calculate the gradients.
         loss.backward(retain_graph=True)
+        loss_recon.backward(retain_graph=True)
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-        # Update parameters.
         optimizer.step()
 
-        loss_recon.backward(retain_graph=True)
         loss_dis.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip_D'])
         optimizer_D.step()
@@ -126,8 +158,9 @@ for epoch in range(params['epoch_num']):
             'model': model.state_dict(),
             'optimizer': optimizer.state_dict(),
             'params': params,
-            'model_D': model_D.state_dict()
-        }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1))
+            'model_D': model_D.state_dict(),
+            'optimizer_D': optimizer_D.state_dict()
+        }, 'checkpoint/model_epoch_{}_gan.pkl'.format(epoch + 1))
 
         with torch.no_grad():
             generate_image(epoch + 1)
