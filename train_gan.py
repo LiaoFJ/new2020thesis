@@ -128,7 +128,7 @@ for epoch in range(params['epoch_num']):
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
 
-        
+
         # Calculate the gradients.
         loss.backward(retain_graph=True)
         loss_recon.backward(retain_graph=True)
@@ -151,7 +151,7 @@ for epoch in range(params['epoch_num']):
 
     avg_loss = 0
     epoch_time = time.time() - epoch_start_time
-    print("Time Taken for Epoch %d: %.2fs" % (epoch + 1, epoch_time))
+    print("Time Taken for Epoch %d: %.2fs" % (epoch + step + 1, epoch_time))
     # Save checkpoint and generate test output.
     if (epoch + 1) % params['save_epoch'] == 0:
         torch.save({
@@ -159,8 +159,9 @@ for epoch in range(params['epoch_num']):
             'optimizer': optimizer.state_dict(),
             'params': params,
             'model_D': model_D.state_dict(),
-            'optimizer_D': optimizer_D.state_dict()
-        }, 'checkpoint/model_epoch_{}_gan.pkl'.format(epoch + 1))
+            'optimizer_D': optimizer_D.state_dict(),
+            'step': epoch
+        }, 'checkpoint/model_epoch_{}_gan.pkl'.format(epoch + 1 + step))
 
         with torch.no_grad():
             generate_image(epoch + 1)
@@ -173,7 +174,9 @@ print("-" * 50)
 torch.save({
     'model': model.state_dict(),
     'optimizer': optimizer.state_dict(),
-    'params': params
+    'params': params,
+    'model_D': model_D.state_dict(),
+    'optimizer_D': optimizer_D.state_dict()
 }, 'checkpoint/model_final.pkl'.format(epoch))
 
 # Generate test output.
