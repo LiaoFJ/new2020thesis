@@ -2,7 +2,7 @@ import torch.nn as nn
 
 
 class P_discriminator(nn.Module):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels=3, out_channels=16):
         super().__init__()
 
         self.BN = nn.BatchNorm2d(out_channels)
