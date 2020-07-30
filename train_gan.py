@@ -12,6 +12,7 @@ from Final_model import Final_model
 from dataloader import get_data
 import os
 from WGAN_part import Discriminator
+from PatchGAN_part import P_discriminator
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 # Function to generate new images and save the time-steps as an animation.
 def generate_image(epoch):
@@ -76,19 +77,20 @@ if args.load_if == True:
     params = state_dict['params']
     model = Final_model(params)
     model.load_state_dict(state_dict['model'])
-    model_D = Discriminator()
+    model_D = P_discriminator()
     model_D.load_state_dict(state_dict['model_D'])
     step = state_dict['step']
     print('load finished and then train')
 else:
     model = Final_model(params).to(device)
-    model_D = Discriminator()
+    model_D = P_discriminator()
     step = 0
 
 
 
 model = Final_model(params)
-model_D = Discriminator()
+# model_D = Discriminator()
+model_D = P_discriminator()
 
 # RMSprop Optimizer
 optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])
@@ -163,8 +165,8 @@ for epoch in range(params['epoch_num']):
             'step': epoch
         }, 'checkpoint/model_epoch_{}_gan.pkl'.format(epoch + 1 + step))
 
-        with torch.no_grad():
-            generate_image(epoch + 1)
+        # with torch.no_grad():
+        #     generate_image(epoch + 1)
 
 training_time = time.time() - start_time
 print("-" * 50)
