@@ -32,7 +32,7 @@ params = {
     'dec_size': 100,  # Hidden dimension for decoder.
     'enc_size': 100,  # Hidden dimension for encoder.
     'epoch_num': 200,  # Number of epochs to train for.
-    'learning_rate': 2e-3,  # Learning rate.
+    'learning_rate': 2e-4,  # Learning rate.
     'clip': 5.0,
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
     'mix_channel': 32,

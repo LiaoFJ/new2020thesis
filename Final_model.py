@@ -24,9 +24,9 @@ class Final_model(nn.Module):
         # self.FinalConv = U.FinalConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
         self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 12, 12, params)
-        self.Draw_model_2 = D.DRAWModel(32, 57, 42, 32, 7, 7, params)
-        self.Draw_model_3 = D.DRAWModel(32, 26, 19, 64, 7, 7, params)
-        self.Draw_model_4 = D.DRAWModel(32, 11, 7, 128, 3, 3, params)
+        self.Draw_model_2 = D.DRAWModel(64, 57, 42, 32, 7, 7, params)
+        self.Draw_model_3 = D.DRAWModel(64, 26, 19, 64, 7, 7, params)
+        self.Draw_model_4 = D.DRAWModel(64, 11, 7, 128, 2, 2, params)
 
 
     def forward(self, x):
@@ -61,9 +61,9 @@ class Final_model(nn.Module):
 
     def loss(self, x):
         x_recon = self.forward(x)
-        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
+        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4 * 10
         criterion = nn.MSELoss()
-        recon_loss = (criterion(x_recon, x) ** 2) * x_recon.size(-1) *100
+        recon_loss = (criterion(x_recon, x) * 2) * x_recon.size(-1) *100
 
 
         return latent_loss + recon_loss
@@ -71,7 +71,7 @@ class Final_model(nn.Module):
     def recon_los(self, x):
         x_recon = self.forward(x)
         criterion = nn.MSELoss()
-        return (criterion(x_recon, x) ** 2) * x.size(-1)
+        return (criterion(x_recon, x) * 2) * x.size(-1) * 100
 
     def generate(self, num_output):
         x_generate_4 = self.Draw_model_4.generate(num_output)
