@@ -5,7 +5,7 @@ import numpy as np
 
 
 class DRAWModel(nn.Module):
-    def __init__(self, T, A, B, in_channels, readn, writen,params):
+    def __init__(self, T, A, B, in_channels, readn, writen, params):
         super().__init__()
 
         self.T = T                          #25

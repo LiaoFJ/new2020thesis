@@ -2,8 +2,14 @@ import torch.nn as nn
 
 
 class P_discriminator(nn.Module):
-    def __init__(self, in_channels=3, out_channels=16):
+    def __init__(self, params, width=90, height=120, in_channels=3, out_channels=16):
         super().__init__()
+
+
+        self.width = width
+        self.height = height
+        self.batch_size = params['batch_size']
+
 
         self.BN = nn.BatchNorm2d(out_channels)
         sequence = [
@@ -25,4 +31,5 @@ class P_discriminator(nn.Module):
             *sequence
         )
     def forward(self, x):
+        x = x.view(self.batch_size, 3, self.width, self.height)
         return self.model(x)
