@@ -2,13 +2,9 @@ import torch.nn as nn
 
 
 class P_discriminator(nn.Module):
-<<<<<<< HEAD
-    def __init__(self, params, width=90, height=120, in_channels=3, out_channels=16):
-=======
-    def __init__(self, in_channels, out_channels):
->>>>>>> parent of e4cac91... up
-        super().__init__()
 
+    def __init__(self, params, width=90, height=120, in_channels=3, out_channels=16):
+        super().__init__()
 
         self.width = width
         self.height = height
