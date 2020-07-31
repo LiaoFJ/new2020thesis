@@ -12,7 +12,7 @@ def get_data(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize(90),
+        transforms.Resize((90, 120)),
         transforms.ToTensor()])
 
     # Create the dataset.

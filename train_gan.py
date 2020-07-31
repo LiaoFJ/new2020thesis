@@ -77,20 +77,20 @@ if args.load_if == True:
     params = state_dict['params']
     model = Final_model(params)
     model.load_state_dict(state_dict['model'])
-    model_D = P_discriminator(params)
+    model_D = P_discriminator()
     model_D.load_state_dict(state_dict['model_D'])
     step = state_dict['step']
     print('load finished and then train')
 else:
     model = Final_model(params).to(device)
-    model_D = P_discriminator(params)
+    model_D = P_discriminator()
     step = 0
 
 
 
 model = Final_model(params)
 # model_D = Discriminator()
-model_D = P_discriminator(params)
+model_D = P_discriminator()
 
 # RMSprop Optimizer
 optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])

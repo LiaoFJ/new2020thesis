@@ -3,13 +3,11 @@ import torch.nn as nn
 
 class P_discriminator(nn.Module):
 
-    def __init__(self, params, width=90, height=120, in_channels=3, out_channels=16):
+    def __init__(self, width=90, height=120, in_channels=3, out_channels=16):
         super().__init__()
 
         self.width = width
         self.height = height
-        self.batch_size = params['batch_size']
-
 
         sequence = [
             nn.Conv2d(in_channels, out_channels, kernel_size=4, stride=2, padding=1),
@@ -30,5 +28,5 @@ class P_discriminator(nn.Module):
             *sequence
         )
     def forward(self, x):
-        x = x.view(self.batch_size, 3, self.width, self.height)
+        x = x.view(x.size(0), 3, self.width, self.height)
         return self.model(x)
