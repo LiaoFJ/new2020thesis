@@ -26,7 +26,7 @@ def generate_image(epoch):
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 32,  # Batch size.
+    'batch_size': 8,  # Batch size.
     'z_size': 50,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
@@ -123,10 +123,12 @@ for epoch in range(params['epoch_num']):
         # Calculate the loss.
         # loss = model.module.loss(data)
 
-
+        #loss of generator
         loss = model.loss(data)
+        #
         loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
-        loss_recon = 0.00005 * model.recon_los(data) - loss_dis
+        #
+
 
         loss_val_G = loss.cpu().data.numpy()
         loss_val_D = loss_dis.cpu().data.numpy()
@@ -136,7 +138,7 @@ for epoch in range(params['epoch_num']):
 
         # Calculate the gradients.
         loss.backward(retain_graph=True)
-        loss_recon.backward(retain_graph=True)
+
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         optimizer.step()
 
