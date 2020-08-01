@@ -98,8 +98,9 @@ optimizer_D = optim.RMSprop(model_D.parameters(), lr = params['learning_rate'])
 # List to hold the losses for each iteration.
 # Used for plotting loss curve.
 losses = []
-iters = 0
+
 avg_loss = 0
+avg_loss_D = 0
 
 print("-" * 25)
 print("Starting Training Loop...\n")
@@ -127,9 +128,11 @@ for epoch in range(params['epoch_num']):
         loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
         loss_recon = 0.00005 * model.recon_los(data) - loss_dis
 
-        loss_val = loss.cpu().data.numpy()
-        avg_loss += loss_val
+        loss_val_G = loss.cpu().data.numpy()
+        loss_val_D = loss_dis.cpu().data.numpy()
 
+        avg_loss += loss_val_G
+        avg_loss_D += loss_val_D
 
         # Calculate the gradients.
         loss.backward(retain_graph=True)
@@ -142,16 +145,17 @@ for epoch in range(params['epoch_num']):
         optimizer_D.step()
 
         # Check progress of training.
-        if i != 0 and i % 100 == 0:
+        if i != 0 and i % 8 == 0:
             print('[%d/%d][%d/%d]\tLoss: %.4f'
-                  % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss / 100))
-
+                  % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss / 8))
+            print('loss D:', avg_loss_D / 8)
             avg_loss = 0
+            avg_loss_D = 0
+        losses.append(loss_val_G)
 
-        losses.append(loss_val)
-        iters += 1
 
     avg_loss = 0
+    avg_loss_D = 0
     epoch_time = time.time() - epoch_start_time
     print("Time Taken for Epoch %d: %.2fs" % (epoch + step + 1, epoch_time))
     # Save checkpoint and generate test output.
