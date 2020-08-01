@@ -142,10 +142,10 @@ for epoch in range(params['epoch_num']):
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         optimizer.step()
 
-        for i in range(5):
-            loss_dis.backward()
-            torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
-            optimizer_D.step()
+
+        loss_dis.backward()
+        torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
+        optimizer_D.step()
 
         # Check progress of training.
 
