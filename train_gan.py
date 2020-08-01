@@ -145,12 +145,13 @@ for epoch in range(params['epoch_num']):
         optimizer_D.step()
 
         # Check progress of training.
-        if i != 0 and i % 8 == 0:
-            print('[%d/%d][%d/%d]\tLoss: %.4f'
-                  % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss / 8))
-            print('loss D:', avg_loss_D / 8)
-            avg_loss = 0
-            avg_loss_D = 0
+
+        print('[%d/%d][%d/%d]\tLoss: %.4f'
+            % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss))
+        print('loss D:', avg_loss_D)
+
+        avg_loss = 0
+        avg_loss_D = 0
         losses.append(loss_val_G)
 
 
