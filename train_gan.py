@@ -33,7 +33,7 @@ params = {
     'dec_size': 100,  # Hidden dimension for decoder.
     'enc_size': 100,  # Hidden dimension for encoder.
     'epoch_num': 200,  # Number of epochs to train for.
-    'learning_rate': 2e-3,  # Learning rate.
+    'learning_rate': 2e-4,  # Learning rate.
     'beta1': 0.5,
     'clip': 5.0,
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
@@ -123,35 +123,46 @@ for epoch in range(params['epoch_num']):
         # Calculate the loss.
         # loss = model.module.loss(data)
 
-        #loss of generator
-        loss = model.loss(data)
-        #
-        loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
-        #
+        #train loss for 1 while loss_D for 5
+        for __ in range(5):
+            #loss of generator
+            loss = model.loss(data)
+            #loss of discriminator
+            loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
+
+            print('params1: ', model.recon_los(data), 'params2: ', torch.mean(model_D(model.generate(params['batch_size']))))
+            loss_recon = 0.00005 * model.recon_los(data) - torch.mean(model_D(model.generate(params['batch_size'])))
+
+            loss_val_G = loss.cpu().data.numpy()
+            loss_val_D = loss_dis.cpu().data.numpy()
 
 
-        loss_val_G = loss.cpu().data.numpy()
-        loss_val_D = loss_dis.cpu().data.numpy()
+            avg_loss += loss_val_G
+            avg_loss_D += loss_val_D
 
-        avg_loss += loss_val_G
-        avg_loss_D += loss_val_D
+            # Calculate the gradients.
 
-        # Calculate the gradients.
-        loss.backward(retain_graph=True)
+            #generator update
+            if __ == 0:
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+                optimizer.step()
+                loss_recon.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+                optimizer.step()
 
-        torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-        optimizer.step()
+            #discriminator update
+            loss_dis.backward()
+            torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
+            optimizer_D.step()
 
 
-        loss_dis.backward()
-        torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
-        optimizer_D.step()
 
         # Check progress of training.
 
         print('[%d/%d][%d/%d]\tLoss: %.4f'
-            % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss))
-        print('loss D:', avg_loss_D)
+            % (epoch + 1, params['epoch_num'], i, len(train_loader), avg_loss / 5))
+        print('loss D:', avg_loss_D / 5)
 
         avg_loss = 0
         avg_loss_D = 0
