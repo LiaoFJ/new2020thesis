@@ -130,7 +130,7 @@ for epoch in range(params['epoch_num']):
             #loss of discriminator
             loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
 
-            print('params1: ', model.recon_los(data), 'params2: ', torch.mean(model_D(model.generate(params['batch_size']))))
+            print('params1: ', model.recon_los(data), 'params2: ', torch.mean(model_D(model.generate(params['batch_size']))), 'params3: ', torch.mean(model_D(data)))
             loss_recon = 0.00005 * model.recon_los(data) - torch.mean(model_D(model.generate(params['batch_size'])))
 
             loss_val_G = loss.cpu().data.numpy()
