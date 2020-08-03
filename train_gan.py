@@ -9,6 +9,7 @@ import argparse
 import torch.nn as nn
 from torchvision import datasets, transforms
 from Final_model import Final_model
+from PatchGAN_part import GANLoss
 from dataloader import get_data
 import os
 from WGAN_part import Discriminator
@@ -101,6 +102,7 @@ losses = []
 
 avg_loss = 0
 avg_loss_D = 0
+criterionGAN = GANLoss().to(device)
 
 print("-" * 25)
 print("Starting Training Loop...\n")
@@ -128,10 +130,13 @@ for epoch in range(params['epoch_num']):
             #loss of generator
             loss = model.loss(data)
             #loss of discriminator
-            loss_dis = -torch.mean(model_D(data)) + torch.mean(model_D(model.generate(params['batch_size'])))
+            loss_d_fake = criterionGAN(model_D(model.generate(params['batch_size'])), False)
+            loss_d_real = criterionGAN(model_D(data), True)
 
-            print('params1: ', model.recon_los(data), 'params2: ', torch.mean(model_D(model.generate(params['batch_size']))), 'params3: ', torch.mean(model_D(data)))
-            loss_recon = 0.00005 * model.recon_los(data) - torch.mean(model_D(model.generate(params['batch_size'])))
+            loss_dis = (loss_d_fake + loss_d_real) * 0.5
+
+            print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
+            loss_recon = 0.0000005 * model.recon_los(data) - loss_d_fake
 
             loss_val_G = loss.cpu().data.numpy()
             loss_val_D = loss_dis.cpu().data.numpy()
