@@ -136,8 +136,8 @@ for epoch in range(params['epoch_num']):
             loss_dis = (loss_d_fake + loss_d_real) * 0.5
 
             print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
-            loss_recon = 0.000005 * model.recon_los(data) - loss_d_fake
-
+            loss_recon = 0.000005 * model.recon_los(data) + loss_dis
+            #10 times scale: loss_recon to loss_d_fake
             loss_val_G = loss.cpu().data.numpy()
             loss_val_D = loss_dis.cpu().data.numpy()
 
