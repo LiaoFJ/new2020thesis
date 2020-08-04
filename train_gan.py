@@ -148,18 +148,19 @@ for epoch in range(params['epoch_num']):
             # Calculate the gradients.
 
             #generator update
-            if __ == 0:
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-                optimizer.step()
-                loss_recon.backward(retain_graph=True)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-                optimizer.step()
+
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+            optimizer.step()
+            loss_recon.backward(retain_graph=True)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+            optimizer.step()
 
             #discriminator update
-            loss_dis.backward()
-            torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
-            optimizer_D.step()
+            if __ == 0:
+                loss_dis.backward()
+                torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
+                optimizer_D.step()
 
 
 
