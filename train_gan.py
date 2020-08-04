@@ -151,7 +151,7 @@ for epoch in range(params['epoch_num']):
             if __ == 0:
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-                optimizer.step()
+                optimizer.step(retain_graph=True)
                 loss_recon.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
                 optimizer.step()
