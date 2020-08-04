@@ -157,10 +157,9 @@ for epoch in range(params['epoch_num']):
             optimizer.step()
 
             #discriminator update
-            if __ == 0:
-                loss_dis.backward()
-                torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
-                optimizer_D.step()
+            loss_dis.backward()
+            torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip_D'])
+            optimizer_D.step()
 
 
 
