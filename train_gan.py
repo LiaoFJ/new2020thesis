@@ -37,7 +37,7 @@ params = {
     'learning_rate': 2e-4,  # Learning rate.
     'beta1': 0.5,
     'clip': 5.0,
-    'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
+    'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
     'mix_channel': 32,
     'clip_D': 0.01
             }  # Number of channels for image.(3 for RGB, etc.)
