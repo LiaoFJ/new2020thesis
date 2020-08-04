@@ -136,7 +136,7 @@ for epoch in range(params['epoch_num']):
             loss_dis = (loss_d_fake + loss_d_real) * 0.5
 
             print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
-            loss_recon = 0.000005 * model.recon_los(data) + loss_dis
+            loss_recon = 0.000001 * model.recon_los(data) + loss_dis
             #10 times scale: loss_recon to loss_d_fake
             loss_val_G = loss.cpu().data.numpy()
             loss_val_D = loss_dis.cpu().data.numpy()
@@ -148,13 +148,13 @@ for epoch in range(params['epoch_num']):
             # Calculate the gradients.
 
             #generator update
-
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-            optimizer.step()
-            loss_recon.backward(retain_graph=True)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-            optimizer.step()
+            if __ == 0:
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+                optimizer.step()
+                loss_recon.backward(retain_graph=True)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+                optimizer.step()
 
             #discriminator update
             loss_dis.backward()
