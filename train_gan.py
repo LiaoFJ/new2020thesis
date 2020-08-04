@@ -126,40 +126,40 @@ for epoch in range(params['epoch_num']):
         # loss = model.module.loss(data)
 
         #train loss for 1 while loss_D for 5
-        for __ in range(5):
-            #loss of generator
-            loss = model.loss(data)
-            #loss of discriminator
-            loss_d_fake = criterionGAN(model_D(model.generate(params['batch_size'])), False)
-            loss_d_real = criterionGAN(model_D(data), True)
 
-            loss_dis = (loss_d_fake + loss_d_real) * 0.5
+        #loss of generator
+        loss = model.loss(data)
+        #loss of discriminator
+        loss_d_fake = criterionGAN(model_D(model.generate(params['batch_size'])), False)
+        loss_d_real = criterionGAN(model_D(data), True)
 
-            print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
-            loss_recon = 0.000001 * model.recon_los(data) + loss_dis
-            #10 times scale: loss_recon to loss_d_fake
-            loss_val_G = loss.cpu().data.numpy()
-            loss_val_D = loss_dis.cpu().data.numpy()
+        loss_dis = (loss_d_fake + loss_d_real) * 0.5
+
+        print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
+        loss_recon = 0.000001 * model.recon_los(data) + loss_dis
+        #10 times scale: loss_recon to loss_d_fake
+        loss_val_G = loss.cpu().data.numpy()
+        loss_val_D = loss_dis.cpu().data.numpy()
 
 
-            avg_loss += loss_val_G
-            avg_loss_D += loss_val_D
+        avg_loss += loss_val_G
+        avg_loss_D += loss_val_D
 
-            # Calculate the gradients.
+        # Calculate the gradients.
 
-            #generator update
-            if __ == 0:
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-                optimizer.step()
-                loss_recon.backward(retain_graph=True)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
-                optimizer.step()
-            if loss_dis > 0.3 :
-                #discriminator update
-                loss_dis.backward()
-                torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip'])
-                optimizer_D.step()
+        #generator update
+
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+        optimizer.step()
+        loss_recon.backward(retain_graph=True)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
+        optimizer.step()
+        if loss_dis > 0.3 :
+            #discriminator update
+            loss_dis.backward()
+            torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip'])
+            optimizer_D.step()
 
 
 
