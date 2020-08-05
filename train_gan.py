@@ -69,8 +69,8 @@ args = parser.parse_args()
 
 print('load_path is:', args.load_path)
 print('if load: ', args.load_if)
-if args.load_if == True:
 
+if args.load_if == 'True':
     print('start loading')
     # Load the checkpoint file.
     state_dict = torch.load(args.load_path)

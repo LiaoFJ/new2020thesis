@@ -72,7 +72,7 @@ parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', he
 parser.add_argument('-load_if', default='False')
 args = parser.parse_args()
 
-if args.load_if == True:
+if args.load_if == 'True':
 
 
     # Load the checkpoint file.
