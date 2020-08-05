@@ -158,7 +158,7 @@ for epoch in range(params['epoch_num']):
         loss_recon.backward(retain_graph=True)
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         optimizer.step()
-        if loss_dis > 0.3 :
+        if loss_d_real > 0.1 :
             #discriminator update
             loss_dis.backward()
             torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip'])
