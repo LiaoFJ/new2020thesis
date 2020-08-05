@@ -67,6 +67,8 @@ parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', he
 parser.add_argument('-load_if', default='False')
 args = parser.parse_args()
 
+print('load_path is:', args.load_path)
+print('if load: ', args.load_if)
 if args.load_if == True:
 
     print('start loading')
