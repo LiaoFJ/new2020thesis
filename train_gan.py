@@ -69,7 +69,7 @@ args = parser.parse_args()
 
 if args.load_if == True:
 
-
+    print('start loading')
     # Load the checkpoint file.
     state_dict = torch.load(args.load_path)
 
@@ -83,15 +83,16 @@ if args.load_if == True:
     step = state_dict['step']
     print('load finished and then train')
 else:
+    print('start init')
     model = Final_model(params).to(device)
     model_D = P_discriminator()
     step = 0
 
 
 
-model = Final_model(params)
+
 # model_D = Discriminator()
-model_D = P_discriminator()
+
 
 # RMSprop Optimizer
 optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])
