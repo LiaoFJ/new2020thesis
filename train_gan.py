@@ -24,7 +24,7 @@ args = parser.parse_args()
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 8,  # Batch size.
+    'batch_size': 4,  # Batch size.
     'z_size': 50,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
