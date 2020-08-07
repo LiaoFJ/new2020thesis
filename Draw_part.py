@@ -17,7 +17,8 @@ class DRAWModel(nn.Module):
         self.enc_size = params['enc_size']              #400
         self.dec_size = params['dec_size']              #400
         self.channel = in_channels                      #3
-        # self.device = params['device']
+
+        self.device = params['device']
         # Stores the generated image for each time step.
         self.cs = [0] * self.T
         self.c_result = [0] * self.T
@@ -79,8 +80,8 @@ class DRAWModel(nn.Module):
         return wr / gamma.view(-1, 1).expand_as(wr)
 
     def sampleQ(self, h_enc):
-        # e = torch.randn(self.batch_size, self.z_size, device=self.device)
-        e = torch.randn(self.batch_size, self.z_size)
+        e = torch.randn(self.batch_size, self.z_size, device=self.device)
+        # e = torch.randn(self.batch_size, self.z_size)
         # Equation 1.
         mu = self.fc_mu(h_enc)
         # Equation 2.
@@ -108,17 +109,17 @@ class DRAWModel(nn.Module):
         return self.filterbank(gx, gy, sigma_2, delta, N), gamma
 
     def filterbank(self, gx, gy, sigma_2, delta, N, epsilon=1e-8):
-        # grid_i = torch.arange(start=0.0, end=N, requires_grad=True, device=self.device).view(1, -1)
-        grid_i = torch.arange(start=0.0, end=N, requires_grad=True).view(1, -1)
+        grid_i = torch.arange(start=0.0, end=N, requires_grad=True, device=self.device).view(1, -1)
+        # grid_i = torch.arange(start=0.0, end=N, requires_grad=True).view(1, -1)
         # Equation 19.
         mu_x = gx + (grid_i - N / 2 - 0.5) * delta
         # Equation 20.
         mu_y = gy + (grid_i - N / 2 - 0.5) * delta
 
-        # a = torch.arange(0.0, self.A, requires_grad=True, device=self.device).view(1, 1, -1)
-        # b = torch.arange(0.0, self.B, requires_grad=True, device=self.device).view(1, 1, -1)
-        a = torch.arange(0.0, self.A, requires_grad=True).view(1, 1, -1)
-        b = torch.arange(0.0, self.B, requires_grad=True).view(1, 1, -1)
+        a = torch.arange(0.0, self.A, requires_grad=True, device=self.device).view(1, 1, -1)
+        b = torch.arange(0.0, self.B, requires_grad=True, device=self.device).view(1, 1, -1)
+        # a = torch.arange(0.0, self.A, requires_grad=True).view(1, 1, -1)
+        # b = torch.arange(0.0, self.B, requires_grad=True).view(1, 1, -1)
         mu_x = mu_x.view(-1, N, 1)
         mu_y = mu_y.view(-1, N, 1)
         sigma_2 = sigma_2.view(-1, 1, 1)
@@ -146,20 +147,20 @@ class DRAWModel(nn.Module):
         x = x.view(self.batch_size, -1)
 
         # requires_grad should be set True to allow backpropagation of the gradients for training.
-        # h_enc_prev = torch.zeros(self.batch_size, self.enc_size, requires_grad=True, device=self.device)
-        # h_dec_prev = torch.zeros(self.batch_size, self.dec_size, requires_grad=True, device=self.device)
-        #
-        # enc_state = torch.zeros(self.batch_size, self.enc_size, requires_grad=True, device=self.device)
-        # dec_state = torch.zeros(self.batch_size, self.dec_size, requires_grad=True, device=self.device)
-        h_enc_prev = torch.zeros(self.batch_size, self.enc_size, requires_grad=True)
-        h_dec_prev = torch.zeros(self.batch_size, self.dec_size, requires_grad=True)
+        h_enc_prev = torch.zeros(self.batch_size, self.enc_size, requires_grad=True, device=self.device)
+        h_dec_prev = torch.zeros(self.batch_size, self.dec_size, requires_grad=True, device=self.device)
 
-        enc_state = torch.zeros(self.batch_size, self.enc_size, requires_grad=True)
-        dec_state = torch.zeros(self.batch_size, self.dec_size, requires_grad=True)
+        enc_state = torch.zeros(self.batch_size, self.enc_size, requires_grad=True, device=self.device)
+        dec_state = torch.zeros(self.batch_size, self.dec_size, requires_grad=True, device=self.device)
+        # h_enc_prev = torch.zeros(self.batch_size, self.enc_size, requires_grad=True)
+        # h_dec_prev = torch.zeros(self.batch_size, self.dec_size, requires_grad=True)
+        #
+        # enc_state = torch.zeros(self.batch_size, self.enc_size, requires_grad=True)
+        # dec_state = torch.zeros(self.batch_size, self.dec_size, requires_grad=True)
 
         for t in range(self.T):
-            # c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True, device=self.device) if t == 0 else self.cs[t - 1]
-            c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True) if t == 0 else self.cs[t - 1]
+            c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True, device=self.device) if t == 0 else self.cs[t - 1]
+            # c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True) if t == 0 else self.cs[t - 1]
              # Equation 3.
 
             x_hat = x - torch.sigmoid(c_prev)
@@ -211,15 +212,15 @@ class DRAWModel(nn.Module):
 
     def generate(self, num_output):
         self.batch_size = num_output
-        # h_dec_prev = torch.zeros(num_output, self.dec_size, device=self.device)
-        # dec_state = torch.zeros(num_output, self.dec_size, device=self.device)
-        h_dec_prev = torch.zeros(num_output, self.dec_size)
-        dec_state = torch.zeros(num_output, self.dec_size)
+        h_dec_prev = torch.zeros(num_output, self.dec_size, device=self.device)
+        dec_state = torch.zeros(num_output, self.dec_size, device=self.device)
+        # h_dec_prev = torch.zeros(num_output, self.dec_size)
+        # dec_state = torch.zeros(num_output, self.dec_size)
         for t in range(self.T):
-            # c_prev = torch.zeros(self.batch_size, self.B*self.A*self.channel, device=self.device) if t == 0 else self.cs[t-1]
-            # z = torch.randn(self.batch_size, self.z_size, device=self.device)
-            c_prev = torch.zeros(self.batch_size, self.B*self.A*self.channel) if t == 0 else self.cs[t-1]
-            z = torch.randn(self.batch_size, self.z_size)
+            c_prev = torch.zeros(self.batch_size, self.B*self.A*self.channel, device=self.device) if t == 0 else self.cs[t-1]
+            z = torch.randn(self.batch_size, self.z_size, device=self.device)
+            # c_prev = torch.zeros(self.batch_size, self.B*self.A*self.channel) if t == 0 else self.cs[t-1]
+            # z = torch.randn(self.batch_size, self.z_size)
             h_dec, dec_state = self.decoder(z, (h_dec_prev, dec_state))
             self.cs[t] = c_prev + self.write(h_dec)
 
