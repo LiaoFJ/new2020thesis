@@ -57,7 +57,8 @@ print(device, " will be used.\n")
 params['device'] = device
 
 model = Final_model(params).to(device)
-model = nn.DataParallel(model.cuda())
+if device == "cuda:0":
+    model = nn.DataParallel(model.cuda())
 
 print('load_path is:', args.load_path)
 print('if load: ', args.load_if)
