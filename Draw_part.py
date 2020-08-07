@@ -202,11 +202,11 @@ class DRAWModel(nn.Module):
             logsigma = self.logsigmas[t]
 
             kl_loss = 0.5*torch.sum(mu_2 + sigma_2 - 2*logsigma, 1) - 0.5*self.T
-            Lz += kl_loss
+            Lzsum = Lz + kl_loss
         # print(Lz)
-        Lz = torch.mean(Lz)
+        Lzavg = torch.mean(Lzsum)
         Lx = 0
-        net_loss = Lx + Lz
+        net_loss = Lx + Lzavg
 
         return net_loss
 

@@ -11,17 +11,17 @@ class P_discriminator(nn.Module):
 
         sequence = [
             nn.Conv2d(in_channels, out_channels, kernel_size=4, stride=2, padding=1),
-            nn.LeakyReLU(0.2, True)
+            nn.LeakyReLU(0.2)
                     ]
         sequence += [
             nn.Conv2d(out_channels, out_channels * 2, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(out_channels * 2),
-            nn.LeakyReLU(0.2, True)
+            nn.LeakyReLU(0.2)
         ]
         sequence += [
             nn.Conv2d(out_channels * 2, out_channels * 4, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(out_channels * 4),
-            nn.LeakyReLU(0.2, True)
+            nn.LeakyReLU(0.2)
         ]
         sequence += [nn.Conv2d(out_channels * 4, 1, kernel_size=4, stride=2, padding=1),]
         sequence += [nn.Sigmoid()]
