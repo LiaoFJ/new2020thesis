@@ -114,14 +114,14 @@ for epoch in range(params['epoch_num']):
         optimizer_D.zero_grad()
 
         #loss of generator
-        loss = model.module.loss(data)
-        # loss = model.loss(data)
+        # loss = model.module.loss(data)
+        loss = model.loss(data)
         #loss of discriminator
         loss_d_fake = criterionGAN(model_D(model.generate(params['batch_size'])), False)
         loss_d_real = criterionGAN(model_D(data), True)
         loss_dis = (loss_d_fake + loss_d_real) * 0.5
 
-        print('params1: ', model.module.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
+        print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
         loss_recon = 0.000001 * model.recon_los(data) + loss_dis
         #10 times scale: loss_recon to loss_d_fake
         loss_val_G = loss.cpu().data.numpy()
