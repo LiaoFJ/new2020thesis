@@ -83,7 +83,7 @@ else:
     print("-" * 25)
     print('start init')
     model = Final_model(params).to(device)
-    model_D = P_discriminator()
+    model_D = P_discriminator().to(device)
     step = 0
 
 # RMSprop Optimizer
