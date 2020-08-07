@@ -16,14 +16,11 @@ from WGAN_part import Discriminator
 from PatchGAN_part import P_discriminator
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 # Function to generate new images and save the time-steps as an animation.
-def generate_image(epoch):
-    x = model.generate(16)
-    fig = plt.figure(figsize=(16, 16))
-    plt.axis("off")
-    ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in x]
-    anim = animation.ArtistAnimation(fig, ims, interval=500, repeat_delay=1000, blit=True)
-    anim.save('draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
-    plt.close('all')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
+parser.add_argument('-load_if', default='False')
+args = parser.parse_args()
 
 # Dictionary storing network parameters.
 params = {
@@ -55,54 +52,44 @@ plt.imshow(np.transpose(vutils.make_grid(
 plt.savefig("Training_Data")
 
 # Initialize the model.
-# device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
-
-device = torch.device("cpu")
-
-
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
-parser.add_argument('-load_if', default='False')
-args = parser.parse_args()
+device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+model = Final_model(params).to(device)
+model = nn.DataParallel(model.cuda())
 
 print('load_path is:', args.load_path)
 print('if load: ', args.load_if)
 
 if args.load_if == 'True':
+    print("-" * 25)
     print('start loading')
+    print("-" * 25)
     # Load the checkpoint file.
     state_dict = torch.load(args.load_path)
 
 
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
-    model = Final_model(params)
+    model = Final_model(params).to(device)
     model.load_state_dict(state_dict['model'])
     model_D = P_discriminator()
     model_D.load_state_dict(state_dict['model_D'])
     step = state_dict['step']
     print('load finished and then train')
+    print("-" * 25)
 else:
+    print("-" * 25)
     print('start init')
     model = Final_model(params).to(device)
     model_D = P_discriminator()
     step = 0
-
-
-
-
-# model_D = Discriminator()
-
 
 # RMSprop Optimizer
 optimizer = optim.RMSprop(model.parameters(), lr=params['learning_rate'])
 optimizer_D = optim.RMSprop(model_D.parameters(), lr = params['learning_rate'])
 # List to hold the losses for each iteration.
 # Used for plotting loss curve.
-losses = []
 
+losses = []
 avg_loss = 0
 avg_loss_D = 0
 criterionGAN = GANLoss().to(device)
@@ -125,20 +112,16 @@ for epoch in range(params['epoch_num']):
         data = data.view(bs, -1).to(device)
         optimizer.zero_grad()
         optimizer_D.zero_grad()
-        # Calculate the loss.
-        # loss = model.module.loss(data)
-
-        #train loss for 1 while loss_D for 5
 
         #loss of generator
-        loss = model.loss(data)
+        loss = model.module.loss(data)
+        # loss = model.loss(data)
         #loss of discriminator
         loss_d_fake = criterionGAN(model_D(model.generate(params['batch_size'])), False)
         loss_d_real = criterionGAN(model_D(data), True)
-
         loss_dis = (loss_d_fake + loss_d_real) * 0.5
 
-        print('params1: ', model.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
+        print('params1: ', model.module.recon_los(data), 'loss_d_fake: ', loss_d_fake, 'loss_d_real: ', loss_d_real)
         loss_recon = 0.000001 * model.recon_los(data) + loss_dis
         #10 times scale: loss_recon to loss_d_fake
         loss_val_G = loss.cpu().data.numpy()
@@ -158,13 +141,12 @@ for epoch in range(params['epoch_num']):
         loss_recon.backward(retain_graph=True)
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         optimizer.step()
+
         if loss_d_real > 0.1 :
             #discriminator update
             loss_dis.backward()
             torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip'])
             optimizer_D.step()
-
-
 
         # Check progress of training.
 
@@ -189,7 +171,7 @@ for epoch in range(params['epoch_num']):
             'params': params,
             'model_D': model_D.state_dict(),
             'optimizer_D': optimizer_D.state_dict(),
-            'step': epoch
+            'step': epoch + 1 + step
         }, 'checkpoint/model_epoch_{}_gan.pkl'.format(epoch + 1 + step))
 
         # with torch.no_grad():
@@ -208,11 +190,7 @@ torch.save({
     'optimizer_D': optimizer_D.state_dict()
 }, 'checkpoint/model_final.pkl'.format(epoch))
 
-# Generate test output.
-with torch.no_grad():
-    generate_image(params['epoch_num'])
 
-# Plot the training losses.
 plt.figure(figsize=(10, 5))
 plt.title("Training Loss")
 plt.plot(losses)
