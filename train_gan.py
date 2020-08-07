@@ -24,7 +24,7 @@ args = parser.parse_args()
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 4,  # Batch size.
+    'batch_size': 8,  # Batch size.
     'z_size': 50,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
@@ -36,7 +36,7 @@ params = {
     'clip': 5.0,
     'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
     'mix_channel': 32,
-    'clip_D': 0.01
+
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
@@ -52,7 +52,8 @@ plt.imshow(np.transpose(vutils.make_grid(
 plt.savefig("Training_Data")
 
 # Initialize the model.
-device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+# device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+device = torch.device("cpu")
 print(device, " will be used.\n")
 params['device'] = device
 
@@ -114,8 +115,8 @@ for epoch in range(params['epoch_num']):
         bs = data.size(0)
         # Flatten the image.
         data = data.view(bs, -1).to(device)
-        optimizer.zero_grad()
-        optimizer_D.zero_grad()
+
+
 
         #loss of generator
         # loss = model.module.loss(data)
@@ -138,7 +139,7 @@ for epoch in range(params['epoch_num']):
         # Calculate the gradients.
 
         #generator update
-
+        optimizer.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), params['clip'])
         optimizer.step()
@@ -148,6 +149,7 @@ for epoch in range(params['epoch_num']):
 
         if loss_d_real > 0.1 :
             #discriminator update
+            optimizer_D.zero_grad()
             loss_dis.backward()
             torch.nn.utils.clip_grad_norm_(model_D.parameters(), params['clip'])
             optimizer_D.step()
