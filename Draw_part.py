@@ -126,8 +126,8 @@ class DRAWModel(nn.Module):
         # Equation 20.
         mu_y = gy + (grid_i - N / 2 - 0.5) * delta
 
-        a = torch.arange(0.0, self.A, requires_grad=True, device=self.device).view(1, 1, -1)
-        b = torch.arange(0.0, self.B, requires_grad=True, device=self.device).view(1, 1, -1)
+        a = torch.arange(0.0, self.B, requires_grad=True, device=self.device).view(1, 1, -1)
+        b = torch.arange(0.0, self.A, requires_grad=True, device=self.device).view(1, 1, -1)
         # a = torch.arange(0.0, self.A, requires_grad=True).view(1, 1, -1)
         # b = torch.arange(0.0, self.B, requires_grad=True).view(1, 1, -1)
         mu_x = mu_x.view(-1, N, 1)
