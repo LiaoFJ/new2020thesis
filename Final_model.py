@@ -32,7 +32,7 @@ class Final_model(nn.Module):
         batch_size = x.size(0)
         x = x.view(batch_size, 3, 100, 125)
         x_out_1 = self.inc(x)
-        # print('x :', x.size())
+        print('x_1 :', x_out_1.size())
         x_out_2 = self.down_1(x_out_1)
         x_out_3 = self.down_2(x_out_2)
         x_out_4 = self.down_3(x_out_3)
