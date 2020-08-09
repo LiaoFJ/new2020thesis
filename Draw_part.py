@@ -6,6 +6,16 @@ import numpy as np
 
 class DRAWModel(nn.Module):
     def __init__(self, T, A, B, in_channels, readn, writen, params):
+        '''
+
+        :param T:
+        :param A:       width
+        :param B:       height
+        :param in_channels:
+        :param readn:
+        :param writen:
+        :param params:
+        '''
         super().__init__()
 
         self.T = T                          #25
@@ -50,7 +60,7 @@ class DRAWModel(nn.Module):
         def filter_img(img, Fx, Fy, gamma):
             Fxt = Fx.transpose(3, 2)
 
-            img = img.view(-1, self.channel, self.B, self.A)
+            img = img.view(-1, self.channel, self.A, self.B)
                 # Equation 27.
             glimpse = torch.matmul(Fy, torch.matmul(img, Fxt))
             glimpse = glimpse.view(-1, self.read_N * self.read_N * self.channel)
@@ -74,7 +84,7 @@ class DRAWModel(nn.Module):
 
         # Equation 29.
         wr = torch.matmul(Fyt, torch.matmul(w, Fx))
-        wr = wr.view(self.batch_size, self.B * self.A * self.channel)
+        wr = wr.view(self.batch_size, self.A * self.B * self.channel)
 
 
         return wr / gamma.view(-1, 1).expand_as(wr)
@@ -142,7 +152,7 @@ class DRAWModel(nn.Module):
     def forward(self, x):
         self.batch_size = x.size(0)
 
-        x = x.view(self.batch_size, self.channel, self.B, self.A)
+        x = x.view(self.batch_size, self.channel, self.A, self.B)
 
         x = x.view(self.batch_size, -1)
 
@@ -159,7 +169,7 @@ class DRAWModel(nn.Module):
         # dec_state = torch.zeros(self.batch_size, self.dec_size, requires_grad=True)
 
         for t in range(self.T):
-            c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True, device=self.device) if t == 0 else self.cs[t - 1]
+            c_prev = torch.zeros(self.batch_size, self.A * self.B * self.channel,requires_grad=True, device=self.device) if t == 0 else self.cs[t - 1]
             # c_prev = torch.zeros(self.batch_size, self.B * self.A * self.channel,requires_grad=True) if t == 0 else self.cs[t - 1]
              # Equation 3.
 
@@ -183,7 +193,7 @@ class DRAWModel(nn.Module):
             h_enc_prev = h_enc
             h_dec_prev = h_dec
 
-        return self.cs[-1].view(self.batch_size, self.channel, self.B, self.A)
+        return self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)
 
 
     def loss(self, x):
@@ -224,4 +234,4 @@ class DRAWModel(nn.Module):
             h_dec, dec_state = self.decoder(z, (h_dec_prev, dec_state))
             self.cs[t] = c_prev + self.write(h_dec)
 
-        return self.cs[-1].view(self.batch_size, self.channel, self.B, self.A)
+        return self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)

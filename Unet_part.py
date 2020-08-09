@@ -6,10 +6,10 @@ class DoubleConv(nn.Module):
     def __init__(self, i_channels, o_channels):
         super().__init__()
         self.double_conv = nn.Sequential(
-            nn.Conv2d(i_channels, o_channels, kernel_size=3, padding=1),
+            nn.Conv2d(i_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
             nn.ReLU(),
-            nn.Conv2d(o_channels, o_channels, kernel_size=3, padding=1),
+            nn.Conv2d(o_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
             nn.ReLU()
         )
