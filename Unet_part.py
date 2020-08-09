@@ -51,7 +51,7 @@ class OutConv(nn.Module):
             nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1),
             nn.BatchNorm2d(o_channels),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1),
+            nn.ConvTranspose2d(o_channels, o_channels, kernel_size=5, stride=1),
             nn.BatchNorm2d(o_channels)
 
         )
