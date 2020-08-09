@@ -20,7 +20,7 @@ def generate_image(epoch):
     plt.axis("off")
     ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in x]
     anim = animation.ArtistAnimation(fig, ims, interval=500, repeat_delay=1000, blit=True)
-    anim.save('draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
+    anim.save('./result/draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
     plt.close('all')
 
 # Dictionary storing network parameters.
@@ -35,7 +35,6 @@ params = {
     'learning_rate': 2e-4,  # Learning rate.
     'clip': 5.0,
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
-    'mix_channel': 32,
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
