@@ -25,7 +25,7 @@ class Final_model(nn.Module):
         self.Draw_model_1 = D.DRAWModel(64, 96, 121, 16, 15, 15, params)
         self.Draw_model_2 = D.DRAWModel(64, 44, 56, 32, 7, 7, params)
         self.Draw_model_3 = D.DRAWModel(64, 18, 24, 64, 4, 4, params)
-        self.Draw_model_4 = D.DRAWModel(64, 5, 8, 128, 1, 1, params)
+        self.Draw_model_4 = D.DRAWModel(32, 5, 8, 128, 2, 2, params)
 
 
     def forward(self, x):

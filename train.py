@@ -40,6 +40,16 @@ params = {
 #loader
 train_loader = get_data(params)
 
+
+#parser
+parser = argparse.ArgumentParser()
+parser.add_argument('-use_gpu', default='False', help='if use gpu to accelerate')
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
+parser.add_argument('-load_if', default='False')
+args = parser.parse_args()
+
+
+
 # Plot the training images.
 sample_batch = next(iter(train_loader))
 plt.figure(figsize=(16, 16))
@@ -50,21 +60,19 @@ plt.imshow(np.transpose(vutils.make_grid(
 plt.savefig("Training_Data")
 
 # Initialize the model.
-# device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
 
-device = torch.device("cpu")
+if args.use_gpu == 'True':
+    device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+    model = Final_model(params).to(device)
+    model = nn.DataParallel(model.cuda())
+else:
+    device = torch.device("cpu")
 params['device'] = device
-
-# model = Final_model(params).to(device)
-# model = nn.DataParallel(model.cuda())
 
 #下面是被注释掉的最初的
 
 #go on training
-parser = argparse.ArgumentParser()
-parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
-parser.add_argument('-load_if', default='False')
-args = parser.parse_args()
+
 
 if args.load_if == 'True':
 
