@@ -46,6 +46,8 @@ train_loader = get_data(params)
 # train_loader_train = get_train_data_set(args.data_path, params)
 
 
+
+
 # Plot the training images.
 sample_batch = next(iter(train_loader))
 plt.figure(figsize=(16, 16))

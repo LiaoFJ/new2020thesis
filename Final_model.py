@@ -10,7 +10,7 @@ class Final_model(nn.Module):
         :param size_b: height of image
         '''
         super().__init__()
-        self.inc = U.SingleConv(3, 16)
+        self.inc = U.DoubleConv(3, 16)
         self.down_1 = U.down_conv(16, 32)
         self.down_2 = U.down_conv(32, 64)
         self.down_3 = U.down_conv(64, 128)
@@ -21,17 +21,16 @@ class Final_model(nn.Module):
         self.up_3 = U.up_conv(32, 16)
 
         self.OutConv = U.OutConv(16, 3)
-        # self.FinalConv = U.FinalConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(64, 118, 88, 16, 12, 12, params)
-        self.Draw_model_2 = D.DRAWModel(64, 57, 42, 32, 7, 7, params)
-        self.Draw_model_3 = D.DRAWModel(64, 26, 19, 64, 7, 7, params)
-        self.Draw_model_4 = D.DRAWModel(64, 11, 7, 128, 2, 2, params)
+        self.Draw_model_1 = D.DRAWModel(64, 96, 121, 16, 15, 15, params)
+        self.Draw_model_2 = D.DRAWModel(64, 44, 56, 32, 7, 7, params)
+        self.Draw_model_3 = D.DRAWModel(64, 18, 24, 64, 4, 4, params)
+        self.Draw_model_4 = D.DRAWModel(64, 5, 8, 128, 1, 1, params)
 
 
     def forward(self, x):
         batch_size = x.size(0)
-        x = x.view(batch_size, 3, 120, 90)
+        x = x.view(batch_size, 3, 100, 125)
         x_out_1 = self.inc(x)
         # print('x :', x.size())
         x_out_2 = self.down_1(x_out_1)
@@ -84,5 +83,5 @@ class Final_model(nn.Module):
         x_generate_mix_1 = self.up_3(x_generate_mix_2, x_generate_1)
 
         img = self.OutConv(x_generate_mix_1)
-        img = img.view(img.size(0), 3, 90, 120)
+        img = img.view(img.size(0), 3, 100, 125)
         return torch.sigmoid(img)

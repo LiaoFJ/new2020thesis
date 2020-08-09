@@ -2,9 +2,10 @@ import torch
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 import os
+from dataset import DatasetFromFolder
 # Directory containing the data.
 root = os.path.abspath('./data/')
-
+path = os.path.abspath('/')
 def get_data(params):
     """
     Loads the dataset and applies proproccesing steps to it.
@@ -12,7 +13,7 @@ def get_data(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize((90, 120)),
+        transforms.Resize((125, 100)),
         transforms.ToTensor()])
 
     # Create the dataset.
@@ -51,4 +52,11 @@ def get_data_for_test(params):
         batch_size=params['batch_size'],
         shuffle=True)
     print(dataloader)
+    return dataloader
+
+def get_train_data_set(path, params):
+    dataset = DatasetFromFolder(path)
+    dataloader = torch.utils.data.DataLoader(dataset,
+        batch_size=params['batch_size'],
+        shuffle=True)
     return dataloader
