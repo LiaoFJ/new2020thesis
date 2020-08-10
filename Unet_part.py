@@ -8,10 +8,8 @@ class DoubleConv(nn.Module):
         self.double_conv = nn.Sequential(
             nn.Conv2d(i_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
-            nn.ReLU(),
             nn.Conv2d(o_channels, o_channels, kernel_size=3),
             nn.BatchNorm2d(o_channels),
-            nn.ReLU()
         )
     def forward(self, x):
         return self.double_conv(x)
@@ -50,7 +48,6 @@ class OutConv(nn.Module):
         self.conv = nn.Sequential(
             nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1),
             nn.BatchNorm2d(o_channels),
-            nn.LeakyReLU(),
             nn.ConvTranspose2d(o_channels, o_channels, kernel_size=5, stride=1),
             nn.BatchNorm2d(o_channels)
 
