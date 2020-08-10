@@ -25,7 +25,7 @@ def generate_image(epoch):
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 32,  # Batch size.
+    'batch_size': 8,  # Batch size.
     'z_size': 64,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
