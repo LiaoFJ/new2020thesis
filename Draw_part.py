@@ -9,8 +9,8 @@ class DRAWModel(nn.Module):
         '''
 
         :param T:
-        :param A:       width
-        :param B:       height
+        :param A:       height
+        :param B:       width
         :param in_channels:
         :param readn:
         :param writen:
@@ -18,15 +18,15 @@ class DRAWModel(nn.Module):
         '''
         super().__init__()
 
-        self.T = T                          #25
-        self.A = A                         #32
-        self.B = B                          #32
-        self.z_size = params['z_size']                  #200
-        self.read_N = readn                  #6
-        self.write_N = writen                #6
-        self.enc_size = params['enc_size']              #400
-        self.dec_size = params['dec_size']              #400
-        self.channel = in_channels                      #3
+        self.T = T
+        self.A = A
+        self.B = B
+        self.z_size = params['z_size']
+        self.read_N = readn
+        self.write_N = writen
+        self.enc_size = params['enc_size']
+        self.dec_size = params['dec_size']
+        self.channel = in_channels
 
         self.device = params['device']
         # Stores the generated image for each time step.
@@ -108,9 +108,9 @@ class DRAWModel(nn.Module):
         gx_, gy_, log_sigma_2, log_delta_, log_gamma = params.split(1, 1)
 
         # Equation 22.
-        gx = (self.A + 1) / 2 * (gx_ + 1)
+        gx = (self.B + 1) / 2 * (gx_ + 1)
         # Equation 23
-        gy = (self.B + 1) / 2 * (gy_ + 1)
+        gy = (self.A + 1) / 2 * (gy_ + 1)
         # Equation 24.
         delta = (max(self.A, self.B) - 1) / (N - 1) * torch.exp(log_delta_)
         sigma_2 = torch.exp(log_sigma_2)
@@ -233,5 +233,12 @@ class DRAWModel(nn.Module):
             # z = torch.randn(self.batch_size, self.z_size)
             h_dec, dec_state = self.decoder(z, (h_dec_prev, dec_state))
             self.cs[t] = c_prev + self.write(h_dec)
+
+        imgs = []
+
+        for img in self.cs:
+            # The image dimesnion is A x B (According to the DRAW paper).
+            img = img.view(-1, self.channel, self.B, self.A)
+            imgs.append(vutils.make_grid(torch.sigmoid(img).detach().cpu(), nrow=int(np.sqrt(int(num_output))), padding=1, normalize=True, pad_value=1))
 
         return self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)

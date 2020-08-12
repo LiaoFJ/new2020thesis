@@ -34,7 +34,7 @@ params = {
     'epoch_num': 200,  # Number of epochs to train for.
     'learning_rate': 2e-4,  # Learning rate.
     'clip': 5.0,
-    'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
+    'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
@@ -47,7 +47,6 @@ parser.add_argument('-use_gpu', default='False', help='if use gpu to accelerate'
 parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
 parser.add_argument('-load_if', default='False')
 args = parser.parse_args()
-
 
 
 # Plot the training images.
@@ -69,17 +68,12 @@ else:
     device = torch.device("cpu")
 params['device'] = device
 
-#下面是被注释掉的最初的
-
 #go on training
-
 
 if args.load_if == 'True':
 
-
     # Load the checkpoint file.
     state_dict = torch.load(args.load_path)
-
 
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
@@ -148,7 +142,8 @@ for epoch in range(params['epoch_num']):
             'model': model.state_dict(),
             'optimizer': optimizer.state_dict(),
             'params': params,
-            'step': epoch
+            'step': epoch,
+            'params_loss': losses
         }, 'checkpoint/model_epoch_{}.pkl'.format(epoch + 1 + step))
 
         with torch.no_grad():
@@ -163,7 +158,8 @@ torch.save({
     'model': model.state_dict(),
     'optimizer': optimizer.state_dict(),
     'params': params,
-    'step': params['epoch_num']
+    'step': params['epoch_num'],
+    'params_loss': losses
 }, 'checkpoint/model_final.pkl'.format(epoch))
 
 # Generate test output.
