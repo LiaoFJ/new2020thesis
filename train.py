@@ -32,7 +32,7 @@ params = {
     'dec_size': 100,  # Hidden dimension for decoder.
     'enc_size': 100,  # Hidden dimension for encoder.
     'epoch_num': 200,  # Number of epochs to train for.
-    'learning_rate': 2e-4,  # Learning rate.
+    'learning_rate': 3e-4,  # Learning rate.
     'clip': 5.0,
     'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
             }  # Number of channels for image.(3 for RGB, etc.)
@@ -85,7 +85,7 @@ else:
     model = Final_model(params).to(device)
     step = 0
 
-optimizer = optim.SGD(model.parameters(), lr=params['learning_rate'])
+optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
 
 
 

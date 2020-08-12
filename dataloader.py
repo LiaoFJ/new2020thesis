@@ -4,7 +4,7 @@ import torchvision.datasets as dset
 import os
 from dataset import DatasetFromFolder
 # Directory containing the data.
-root = os.path.abspath('./data/')
+root = os.path.abspath('./data_2/')
 path = os.path.abspath('/')
 def get_data(params):
     """
@@ -13,7 +13,7 @@ def get_data(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize((125, 100)),
+        transforms.Resize((100, 100)),
         transforms.ToTensor()])
 
     # Create the dataset.

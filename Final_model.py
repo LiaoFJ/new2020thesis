@@ -22,15 +22,15 @@ class Final_model(nn.Module):
 
         self.OutConv = U.OutConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(64, 121, 96, 16, 15, 15, params)
-        self.Draw_model_2 = D.DRAWModel(64, 56, 44, 32, 7, 7, params)
-        self.Draw_model_3 = D.DRAWModel(64, 24, 18, 64, 4, 4, params)
-        self.Draw_model_4 = D.DRAWModel(32, 8, 5, 128, 2, 2, params)
+        self.Draw_model_1 = D.DRAWModel(64, 96, 96, 16, 15, 15, params)
+        self.Draw_model_2 = D.DRAWModel(32, 44, 44, 32, 7, 7, params)
+        self.Draw_model_3 = D.DRAWModel(32, 18, 18, 64, 4, 4, params)
+        self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
 
 
     def forward(self, x):
         batch_size = x.size(0)
-        x = x.view(batch_size, 3, 125, 100)
+        x = x.view(batch_size, 3, 100, 100)
         x_out_1 = self.inc(x)
         print('x_1 :', x_out_1.size())
         x_out_2 = self.down_1(x_out_1)
@@ -84,5 +84,5 @@ class Final_model(nn.Module):
 
         img = self.OutConv(x_generate_mix_1)
         # batch_size, channel, height, width
-        img = img.view(img.size(0), 3, 125, 100)
+        img = img.view(img.size(0), 3, 100, 100)
         return torch.sigmoid(img)
