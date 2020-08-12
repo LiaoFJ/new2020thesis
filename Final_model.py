@@ -60,7 +60,7 @@ class Final_model(nn.Module):
 
     def loss(self, x):
         x_recon = self.forward(x)
-        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4 * 10
+        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4 * 8
         criterion = nn.MSELoss()
         recon_loss = (criterion(x_recon, x) * 2) * x_recon.size(-1) *100
 
