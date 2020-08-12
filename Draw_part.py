@@ -234,11 +234,11 @@ class DRAWModel(nn.Module):
             h_dec, dec_state = self.decoder(z, (h_dec_prev, dec_state))
             self.cs[t] = c_prev + self.write(h_dec)
 
-        imgs = []
-
-        for img in self.cs:
-            # The image dimesnion is A x B (According to the DRAW paper).
-            img = img.view(-1, self.channel, self.B, self.A)
-            imgs.append(vutils.make_grid(torch.sigmoid(img).detach().cpu(), nrow=int(np.sqrt(int(num_output))), padding=1, normalize=True, pad_value=1))
+        # imgs = []
+        #
+        # for img in self.cs:
+        #     # The image dimesnion is A x B (According to the DRAW paper).
+        #     img = img.view(-1, self.channel, self.B, self.A)
+        #     imgs.append(vutils.make_grid(torch.sigmoid(img).detach().cpu(), nrow=int(np.sqrt(int(num_output))), padding=1, normalize=True, pad_value=1))
 
         return self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)
