@@ -34,7 +34,7 @@ params = {
     'epoch_num': 200,  # Number of epochs to train for.
     'learning_rate': 3e-4,  # Learning rate.
     'clip': 5.0,
-    'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
+    'save_epoch': 1,  # After how many epochs to save checkpoints and generate test output.
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
