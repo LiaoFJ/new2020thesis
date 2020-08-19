@@ -37,7 +37,7 @@ def get_data_for_test(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize((90, 120)),
+        transforms.Resize((100, 100)),
         transforms.ToTensor()])
 
     # Create the dataset.
