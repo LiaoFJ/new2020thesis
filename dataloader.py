@@ -3,6 +3,8 @@ import torchvision.transforms as transforms
 import torchvision.datasets as dset
 import os
 from dataset import DatasetFromFolder
+from PIL import Image
+
 # Directory containing the data.
 root = os.path.abspath('./data_2/')
 path = os.path.abspath('/')
@@ -13,8 +15,10 @@ def get_data(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize((100, 100)),
-        transforms.ToTensor()])
+        transforms.Resize((128, 128)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
 
     # Create the dataset.
     dataset = dset.ImageFolder(root=root, transform=transform)
@@ -37,8 +41,11 @@ def get_data_for_test(params):
     """
     # Data proprecessing.
     transform = transforms.Compose([
-        transforms.Resize((100, 100)),
-        transforms.ToTensor()])
+        transforms.Resize((128, 128)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+
 
     # Create the dataset.
     dataset = dset.ImageFolder(root=root, transform=transform)
@@ -60,3 +67,14 @@ def get_train_data_set(path, params):
         batch_size=params['batch_size'],
         shuffle=True)
     return dataloader
+
+def get_test_img_single():
+    transform = transforms.Compose([
+        transforms.Resize((128, 128)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    test_img = Image.open('./test_image/test.jpg')
+    img = transform(test_img)
+    img.unsqueeze_(0)
+    return img

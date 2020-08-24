@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import Unet_part as U
 import Draw_part as D
+import VAE_part as V
 import torch.nn.functional as F
 class Final_model(nn.Module):
     def __init__(self, params):
@@ -26,6 +27,13 @@ class Final_model(nn.Module):
         self.Draw_model_2 = D.DRAWModel(32, 44, 44, 32, 7, 7, params)
         self.Draw_model_3 = D.DRAWModel(32, 18, 18, 64, 4, 4, params)
         self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
+
+
+        # self.Draw_model_1 = V.VAE(16, 96, 512, 100)
+        # self.Draw_model_2 = V.VAE(16, 44, 256, 80)
+        # self.Draw_model_3 = V.VAE(16, 18, 128, 40)
+        # self.Draw_model_4 = V.VAE(16, 5, 512, 100)
+
 
 
     def forward(self, x):

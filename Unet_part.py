@@ -6,10 +6,10 @@ class DoubleConv(nn.Module):
     def __init__(self, i_channels, o_channels):
         super().__init__()
         self.double_conv = nn.Sequential(
-            nn.Conv2d(i_channels, o_channels, kernel_size=3),
+            nn.Conv2d(i_channels, o_channels, kernel_size=3, padding=1),
             nn.BatchNorm2d(o_channels),
             nn.LeakyReLU(0.2),
-            nn.Conv2d(o_channels, o_channels, kernel_size=3),
+            nn.Conv2d(o_channels, o_channels, kernel_size=3, padding=1),
             nn.BatchNorm2d(o_channels),
             nn.LeakyReLU(0.2)
         )
@@ -49,10 +49,10 @@ class OutConv(nn.Module):
     def __init__(self, i_channels, o_channels):
         super().__init__()
         self.conv = nn.Sequential(
-            nn.ConvTranspose2d(i_channels, o_channels, kernel_size=5, stride=1),
+            nn.ConvTranspose2d(i_channels, o_channels, stride=1),
             nn.BatchNorm2d(o_channels),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(o_channels, o_channels, kernel_size=5, stride=1),
+            nn.ConvTranspose2d(o_channels, o_channels, stride=1),
             nn.BatchNorm2d(o_channels)
 
         )
