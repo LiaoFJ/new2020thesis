@@ -49,10 +49,10 @@ class OutConv(nn.Module):
     def __init__(self, i_channels, o_channels):
         super().__init__()
         self.conv = nn.Sequential(
-            nn.ConvTranspose2d(i_channels, o_channels, stride=1),
+            nn.ConvTranspose2d(i_channels, o_channels, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(o_channels),
             nn.LeakyReLU(0.2),
-            nn.ConvTranspose2d(o_channels, o_channels, stride=1),
+            nn.ConvTranspose2d(o_channels, o_channels, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(o_channels)
 
         )

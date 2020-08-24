@@ -16,9 +16,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 8,  # Batch size.
+    'batch_size': 1,  # Batch size.
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
     'epoch_num': 50,  # Number of epochs to train for.
+    'learning_rate': 3e-4,  # Learning rate.
 
 }  # Number of channels for image.(3 for RGB, etc.)
 

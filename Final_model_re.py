@@ -26,9 +26,8 @@ class Final_model_re(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        x = x.view(batch_size, 3, 100, 100)
+        x = x.view(batch_size, 3, 128, 128)
         x_out_1 = self.inc(x)
-        print('x_1 :', x_out_1.size())
         x_out_2 = self.down_1(x_out_1)
         x_out_3 = self.down_2(x_out_2)
         x_out_4 = self.down_3(x_out_3)
@@ -38,7 +37,6 @@ class Final_model_re(nn.Module):
         x_model_out_1 = self.up_3(x_model_out_2, x_out_1)
         self.for_dis = x_model_out_1
         x_model_output = self.OutConv(x_model_out_1)
-
         return torch.sigmoid(x_model_output)
 
     def loss(self, x):
