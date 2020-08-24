@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 1,  # Batch size.
+    'batch_size': 16,  # Batch size.
     'save_epoch': 10,  # After how many epochs to save checkpoints and generate test output.
     'epoch_num': 50,  # Number of epochs to train for.
     'learning_rate': 3e-4,  # Learning rate.
@@ -30,8 +30,8 @@ train_loader = get_data(params)
 #parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-use_gpu', default='False', help='if use gpu to accelerate')
-parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
 parser.add_argument('-load_if', default='False')
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_300.pkl', help='Checkpoint to load path from')
 args = parser.parse_args()
 
 # Initialize the model.
@@ -45,10 +45,11 @@ else:
 params['device'] = device
 
 #go on training
+print(device, " will be used.\n")
 
 if args.load_if == 'True':
-
     # Load the checkpoint file.
+    print('load_path is:', args.load_path)
     state_dict = torch.load(args.load_path)
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
