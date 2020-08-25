@@ -143,8 +143,8 @@ torch.save({
 with torch.no_grad():
     img = get_test_img_single()
     img = img.view(1, -1).to(device)
-    x = model()
-    ims = plt.imshow(np.transpose((1, 2, 0)), animated=True)
+    x = model(img)
+    ims = plt.imshow(np.transpose(x, (1, 2, 0)), animated=True)
 ims.savefig('./result/test_img.jpg')
 
 # Plot the training losses.
