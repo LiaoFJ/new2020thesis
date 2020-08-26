@@ -74,7 +74,7 @@ def get_test_img_single():
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    test_img = Image.open('./test_image/test.jpg')
+    test_img = Image.open('./test_image/test.jpg').convert("RGB")
     img = transform(test_img)
     img.unsqueeze_(0)
     return img
