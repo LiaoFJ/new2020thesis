@@ -68,7 +68,7 @@ with torch.no_grad():
     img = img.view(1, -1).to(device)
     x = model(img)
     x = x.view(x.size(0), 3, 128, 128)
-    gene = x.cpu().data.numpy()
+    gene = x.cpu()
     save_image(gene, './result/test_img.jpg')
 
 
