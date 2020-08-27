@@ -10,7 +10,7 @@ class VAE(nn.Module):
 
 
         self.fc1 = nn.Sequential(
-            nn.Linear(self.input_dim ** 2, second_dim),
+            nn.Linear(self.in_channels * self.input_dim ** 2, second_dim),
             nn.LeakyReLU(0.2)
         )
 
@@ -24,7 +24,7 @@ class VAE(nn.Module):
         )
 
         self.fc_out = nn.Sequential(
-            nn.Linear(second_dim, self.input_dim ** 2),
+            nn.Linear(second_dim, self.in_channels * self.input_dim ** 2),
             nn.Sigmoid()
         )
 
