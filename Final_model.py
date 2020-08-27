@@ -38,7 +38,7 @@ class Final_model(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        x = x.view(batch_size, 3, 100, 100)
+        x = x.view(batch_size, 3, 128, 128)
         x_out_1 = self.inc(x)
         print('x_1 :', x_out_1.size())
         x_out_2 = self.down_1(x_out_1)
@@ -92,5 +92,5 @@ class Final_model(nn.Module):
 
         img = self.OutConv(x_generate_mix_1)
         # batch_size, channel, height, width
-        img = img.view(img.size(0), 3, 100, 100)
+        img = img.view(img.size(0), 3, 128, 128)
         return torch.sigmoid(img)
