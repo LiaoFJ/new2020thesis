@@ -127,7 +127,7 @@ for epoch in range(params['epoch_num']):
         optimizer.zero_grad()
         # Calculate the loss.
         # loss = model.module.loss(data)
-        loss = model.loss(data)
+        loss = model.module.loss(data)
         loss_val = loss.cpu().data.numpy()
         avg_loss += loss_val
         # Calculate the gradients.
