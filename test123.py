@@ -67,6 +67,7 @@ with torch.no_grad():
     img = get_test_img_single()
     img = img.view(1, -1).to(device)
     x = model(img)
+    x = x.view(x.size(0), 3, 128, 128)
     print(x.size())
     gene = x.cpu().data.numpy()
     ims = plt.imshow(np.transpose(gene, (1, 2, 0)), animated=True)
