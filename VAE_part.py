@@ -29,11 +29,13 @@ class VAE(nn.Module):
         )
 
     def forward(self, x):
+        x = x.view(x.size(0), -1)
         se = self.fc1(x)
         self.mu = self.enc1(se)
         self.logvar = self.enc2(se)
         se_out = self.dec(self.re_parameter(self.mu, self.logvar))
         out = self.fc_out(se_out)
+        out = out.view(out.size(0), self.in_channels, self.input_dim, self.input_dim)
         return out
 
 
