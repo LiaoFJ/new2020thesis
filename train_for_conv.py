@@ -40,11 +40,11 @@ args = parser.parse_args()
 
 if args.use_gpu == 'True':
     device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
-    model = Final_model_re(params).to(device)
-    model = nn.DataParallel(model.cuda())
+    params['device'] = device
+
 else:
     device = torch.device("cpu")
-params['device'] = device
+    params['device'] = device
 
 #go on training
 print(device, " will be used.\n")
@@ -56,6 +56,7 @@ if args.load_if == 'True':
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
     model = Final_model_re(params).to(device)
+    model = nn.DataParallel(model.cuda())
     model.load_state_dict(state_dict['model'])
     step = state_dict['step']
     print('load finished and then train')
