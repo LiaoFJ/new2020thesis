@@ -23,6 +23,9 @@ params = {
 
 }  # Number of channels for image.(3 for RGB, etc.)
 
+#loader
+train_loader = get_data(params)
+
 
 #parser
 parser = argparse.ArgumentParser()
@@ -35,6 +38,8 @@ args = parser.parse_args()
 
 if args.use_gpu == 'True':
     device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+    model = Final_model_re(params).to(device)
+    model = nn.DataParallel(model.cuda())
 else:
     device = torch.device("cpu")
 params['device'] = device
@@ -49,7 +54,6 @@ if args.load_if == 'True':
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
     model = Final_model_re(params).to(device)
-    model = nn.DataParallel(model.cuda())
     model.load_state_dict(state_dict['model'])
     step = state_dict['step']
     print('load finished and then train')
@@ -57,8 +61,7 @@ else:
     model = Final_model_re(params).to(device)
     step = 0
 
-
-
+optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
 
 with torch.no_grad():
     img = get_test_img_single()
@@ -68,4 +71,3 @@ with torch.no_grad():
     gene = x.cpu().data.numpy()
     ims = plt.imshow(np.transpose(gene, (1, 2, 0)), animated=True)
 ims.savefig('./result/test_img.jpg')
-
