@@ -2,11 +2,11 @@ import torch
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.animation as animation
 import time
-import torchvision.utils as vutils
 import torch.nn as nn
 from torchvision import datasets, transforms
+from torchvision.utils import save_image
+
 from dataloader import get_data, get_test_img_single
 import os
 import argparse
@@ -68,7 +68,7 @@ with torch.no_grad():
     img = img.view(1, -1).to(device)
     x = model(img)
     x = x.view(x.size(0), 3, 128, 128)
-    print(x.size())
     gene = x.cpu().data.numpy()
-    ims = plt.imshow(np.transpose(gene, (1, 2, 0)), animated=True)
-ims.savefig('./result/test_img.jpg')
+    save_image(gene, './result/test_img.jpg')
+
+
