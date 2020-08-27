@@ -25,7 +25,7 @@ def generate_image(epoch):
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 8,  # Batch size.
+    'batch_size': 16,  # Batch size.
     'z_size': 64,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
@@ -34,7 +34,7 @@ params = {
     'epoch_num': 200,  # Number of epochs to train for.
     'learning_rate': 3e-4,  # Learning rate.
     'clip': 5.0,
-    'save_epoch': 1,  # After how many epochs to save checkpoints and generate test output.
+    'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
             }  # Number of channels for image.(3 for RGB, etc.)
 
 #loader
@@ -77,7 +77,8 @@ if args.load_if == 'True':
     state_dict = torch.load(args.load_path)
 
     # Get the 'params' dictionary from the loaded state_dict.
-    params = state_dict['params']
+    params_add = state_dict['params']
+    params.update(params_add)
     model = Final_model(params).to(device)
     model = nn.DataParallel(model.cuda())
     model.load_state_dict(state_dict['model'], strict=False)
