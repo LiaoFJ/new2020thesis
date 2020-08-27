@@ -23,16 +23,16 @@ class Final_model(nn.Module):
 
         self.OutConv = U.OutConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(64, 96, 96, 16, 12, 12, params)
-        self.Draw_model_2 = D.DRAWModel(32, 44, 44, 32, 7, 7, params)
-        self.Draw_model_3 = D.DRAWModel(32, 18, 18, 64, 4, 4, params)
-        self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
+        # self.Draw_model_1 = D.DRAWModel(64, 96, 96, 16, 12, 12, params)
+        # self.Draw_model_2 = D.DRAWModel(32, 44, 44, 32, 7, 7, params)
+        # self.Draw_model_3 = D.DRAWModel(32, 18, 18, 64, 4, 4, params)
+        # self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
 
 
-        # self.Draw_model_1 = V.VAE(16, 96, 512, 100)
-        # self.Draw_model_2 = V.VAE(16, 44, 256, 80)
-        # self.Draw_model_3 = V.VAE(16, 18, 128, 40)
-        # self.Draw_model_4 = V.VAE(16, 5, 512, 100)
+        self.Draw_model_1 = V.VAE(16, 128, 512, 100)
+        self.Draw_model_2 = V.VAE(32, 64, 512, 80)
+        self.Draw_model_3 = V.VAE(64, 32, 256, 40)
+        self.Draw_model_4 = V.VAE(128, 16, 128, 40)
 
 
 
