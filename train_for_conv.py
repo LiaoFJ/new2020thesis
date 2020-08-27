@@ -53,7 +53,7 @@ if args.load_if == 'True':
     state_dict = torch.load(args.load_path)
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
-    model = Final_model_re(params)
+    model = Final_model_re(params).to(device)
     model.load_state_dict(state_dict['model'])
     step = state_dict['step']
     print('load finished and then train')
