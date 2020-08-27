@@ -78,15 +78,25 @@ if args.load_if == 'True':
     # Get the 'params' dictionary from the loaded state_dict.
     params = state_dict['params']
     model = Final_model(params)
-    model.load_state_dict(state_dict['model'])
+    model.load_state_dict(state_dict['model'], strict=False)
+
     step = state_dict['step']
     print('load finished and then train')
 else:
     model = Final_model(params).to(device)
     step = 0
 
-optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
+freeze_layers=['inc', 'down_1', 'down_2', 'down_3', 'up_1', 'up_2', 'up_3', 'OutConv']
 
+print('************************')
+print('freeze some layers')
+for name, module in model._modules.items():
+    if name in freeze_layers:
+        for p in module.parameters():
+            p.requires_grad = False
+
+optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=params['learning_rate'])
+print('************************')
 
 
 # List to hold the losses for each iteration.
