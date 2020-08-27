@@ -26,7 +26,7 @@ class Final_model_re(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        x = x.view(batch_size, 3, 128, 128)
+        x = x.view(batch_size, 3, 64, 64)
         x_out_1 = self.inc(x)
         x_out_2 = self.down_1(x_out_1)
         x_out_3 = self.down_2(x_out_2)
