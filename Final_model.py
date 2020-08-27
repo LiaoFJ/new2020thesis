@@ -29,10 +29,10 @@ class Final_model(nn.Module):
         # self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
 
 
-        self.Draw_model_1 = V.VAE(16, 128, 2048, 100)
-        self.Draw_model_2 = V.VAE(32, 64, 2048, 100)
-        self.Draw_model_3 = V.VAE(64, 32, 2048, 100)
-        self.Draw_model_4 = V.VAE(128, 16, 2048, 100)
+        self.Draw_model_1 = V.VAE(16, 128, 1024, 100)
+        self.Draw_model_2 = V.VAE(32, 64, 1024, 100)
+        self.Draw_model_3 = V.VAE(64, 32, 1024, 100)
+        self.Draw_model_4 = V.VAE(128, 16, 1024, 100)
 
 
 

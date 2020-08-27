@@ -25,7 +25,7 @@ def generate_image(epoch):
 
 # Dictionary storing network parameters.
 params = {
-    'batch_size': 16,  # Batch size.
+    'batch_size': 4,  # Batch size.
     'z_size': 64,  # Dimension of latent space.
     # 'read_N': 5,  # N x N dimension of reading glimpse.
     # 'write_N': 5,  # N x N dimension of writing glimpse.
@@ -79,6 +79,7 @@ if args.load_if == 'True':
     # Get the 'params' dictionary from the loaded state_dict.
     params_add = state_dict['params']
     params.update(params_add)
+    params['batch_size'] = 4
     model = Final_model(params).to(device)
     model = nn.DataParallel(model.cuda())
     model.load_state_dict(state_dict['model'], strict=False)
