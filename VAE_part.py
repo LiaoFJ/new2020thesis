@@ -2,13 +2,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 class VAE(nn.Module):
-    def __init__(self, in_channels, input_dim, second_dim, latent_dim):
+    def __init__(self, in_channels, input_dim, second_dim, latent_dim, device):
         super().__init__()
         self.latent_dim = latent_dim
         self.in_channels = in_channels
         self.input_dim = input_dim
 
-
+        self.device = device
         self.fc1 = nn.Sequential(
             nn.Linear(self.in_channels * self.input_dim ** 2, second_dim),
             nn.LeakyReLU(0.2)
@@ -56,7 +56,7 @@ class VAE(nn.Module):
     def generate(self, num_out):
         batch_size = num_out
 
-        sample = torch.randn(batch_size, self.latent_dim)
+        sample = torch.randn(batch_size, self.latent_dim).to(self.device)
         se_out = self.dec(sample)
         out = self.fc_out(se_out)
         return out.view(batch_size, self.in_channels, self.input_dim, self.input_dim)

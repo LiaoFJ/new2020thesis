@@ -15,7 +15,7 @@ class Final_model(nn.Module):
         self.down_1 = U.down_conv(16, 32)
         self.down_2 = U.down_conv(32, 64)
         self.down_3 = U.down_conv(64, 128)
-
+        self.device = params['device']
 
         self.up_1 = U.up_conv(128, 64)
         self.up_2 = U.up_conv(64, 32)
@@ -29,10 +29,10 @@ class Final_model(nn.Module):
         # self.Draw_model_4 = D.DRAWModel(16, 5, 5, 128, 2, 2, params)
 
 
-        self.Draw_model_1 = V.VAE(16, 64, 1024, 100)
-        self.Draw_model_2 = V.VAE(32, 32, 1024, 100)
-        self.Draw_model_3 = V.VAE(64, 16, 1024, 100)
-        self.Draw_model_4 = V.VAE(128, 8, 1024, 100)
+        self.Draw_model_1 = V.VAE(16, 64, 1024, 100, self.device)
+        self.Draw_model_2 = V.VAE(32, 32, 1024, 100, self.device)
+        self.Draw_model_3 = V.VAE(64, 16, 1024, 100, self.device)
+        self.Draw_model_4 = V.VAE(128, 8, 1024, 100, self.device)
 
 
 
