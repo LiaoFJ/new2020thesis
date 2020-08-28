@@ -11,17 +11,20 @@ from Final_model import Final_model
 from dataloader import get_data
 import os
 import argparse
+from torchvision.utils import save_image
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 # Function to generate new images and save the time-steps as an animation.
 def generate_image(epoch):
     x = model.module.generate(16)
-    fig = plt.figure(figsize=(16, 16))
-    plt.axis("off")
-    ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in x]
-    anim = animation.ArtistAnimation(fig, ims, interval=500, repeat_delay=1000, blit=True)
-    anim.save('./result/draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
-    plt.close('all')
+    gene = x.cpu()
+    save_image(gene, './result/test_img_generated_{}.jpg'.format(epoch))
+    # fig = plt.figure(figsize=(16, 16))
+    # plt.axis("off")
+    # ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in x]
+    # anim = animation.ArtistAnimation(fig, ims, interval=500, repeat_delay=1000, blit=True)
+    # anim.save('./result/draw_epoch_{}.gif'.format(epoch), dpi=100, writer='pillow')
+    # plt.close('all')
 
 # Dictionary storing network parameters.
 params = {
