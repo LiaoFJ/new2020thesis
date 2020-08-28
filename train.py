@@ -163,8 +163,8 @@ for epoch in range(params['epoch_num']):
             'params_loss': losses
         }, 'checkpoint/model_epoch_{}_se.pkl'.format(epoch + 1 + step))
 
-        with torch.no_grad():
-            generate_image(epoch + 1)
+        # with torch.no_grad():
+        #     generate_image(epoch + 1)
 
 training_time = time.time() - start_time
 print("-" * 50)
