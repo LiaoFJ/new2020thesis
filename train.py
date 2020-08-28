@@ -15,7 +15,7 @@ import argparse
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 # Function to generate new images and save the time-steps as an animation.
 def generate_image(epoch):
-    x = model.generate(16)
+    x = model.module.generate(16)
     fig = plt.figure(figsize=(16, 16))
     plt.axis("off")
     ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in x]
