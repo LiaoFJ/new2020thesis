@@ -23,16 +23,16 @@ class Final_model(nn.Module):
 
         self.OutConv = U.OutConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        # self.Draw_model_1 = D.DRAWModel(32, 96, 96, 16, 10, 10, params)
-        # self.Draw_model_2 = D.DRAWModel(16, 44, 44, 32, 6, 6, params)
-        # self.Draw_model_3 = D.DRAWModel(16, 18, 18, 64, 4, 4, params)
-        # self.Draw_model_4 = D.DRAWModel(8, 5, 5, 128, 2, 2, params)
+        self.Draw_model_1 = D.DRAWModel(32, 64, 64, 16, 10, 10, params)
+        self.Draw_model_2 = D.DRAWModel(16, 32, 32, 32, 6, 6, params)
+        self.Draw_model_3 = D.DRAWModel(16, 16, 16, 64, 4, 4, params)
+        self.Draw_model_4 = D.DRAWModel(8, 8, 8, 128, 2, 2, params)
 
 
-        self.Draw_model_1 = V.VAE(16, 64, 3500, 300, self.device)
-        self.Draw_model_2 = V.VAE(32, 32, 3500, 200, self.device)
-        self.Draw_model_3 = V.VAE(64, 16, 2000, 200, self.device)
-        self.Draw_model_4 = V.VAE(128, 8, 1000, 100, self.device)
+        # self.Draw_model_1 = V.VAE(16, 64, 3500, 300, self.device)
+        # self.Draw_model_2 = V.VAE(32, 32, 3500, 200, self.device)
+        # self.Draw_model_3 = V.VAE(64, 16, 2000, 200, self.device)
+        # self.Draw_model_4 = V.VAE(128, 8, 1000, 100, self.device)
 
 
 
