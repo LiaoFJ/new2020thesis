@@ -242,7 +242,5 @@ class DRAWModel(nn.Module):
         #     img = img.view(-1, self.channel, self.B, self.A)
         #     imgs.append(vutils.make_grid(torch.sigmoid(img).detach().cpu(), nrow=int(np.sqrt(int(num_output))), padding=1, normalize=True, pad_value=1))
 
-        print(self.cs[-1].size())
         img = self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)
-        print(img)
         return img

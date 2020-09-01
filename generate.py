@@ -62,5 +62,4 @@ print('load finished and then get image')
 
 # Generate test output.
 with torch.no_grad():
-    generate_image(params['epoch_num'])
-
+    generate_image(step)
