@@ -34,7 +34,7 @@ params = {
     # 'write_N': 5,  # N x N dimension of writing glimpse.
     'dec_size': 100,  # Hidden dimension for decoder.
     'enc_size': 100,  # Hidden dimension for encoder.
-    'epoch_num': 200,  # Number of epochs to train for.
+    'epoch_num': 50,  # Number of epochs to train for.
     'learning_rate': 3e-4,  # Learning rate.
     'clip': 5.0,
     'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
