@@ -1,57 +1,66 @@
-import argparse
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 import torch
-import numpy as np
+import torch.optim as optim
 import matplotlib.pyplot as plt
+import numpy as np
 import matplotlib.animation as animation
-import torchvision.utils as vutils
 import time
+import torchvision.utils as vutils
 import torch.nn as nn
+from torchvision import datasets, transforms
 from Final_model import Final_model
+from dataloader import get_data
+import os
+import argparse
+from torchvision.utils import save_image
 
+os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
+
+# Function to generate new images and save the time-steps as an animation.
+def generate_image(epoch):
+    x = model.generate(16)
+    gene = x.cpu()
+    save_image(gene, './result/test_img_generated_{}.jpg'.format(epoch))
+
+# Dictionary storing network parameters.
+params = {
+    'batch_size': 4,  # Batch size.
+    'z_size': 64,  # Dimension of latent space.
+    # 'read_N': 5,  # N x N dimension of reading glimpse.
+    # 'write_N': 5,  # N x N dimension of writing glimpse.
+    'dec_size': 100,  # Hidden dimension for decoder.
+    'enc_size': 100,  # Hidden dimension for encoder.
+    'epoch_num': 50,  # Number of epochs to train for.
+    'learning_rate': 3e-4,  # Learning rate.
+    'clip': 5.0,
+    'save_epoch': 5,  # After how many epochs to save checkpoints and generate test output.
+            }  # Number of channels for image.(3 for RGB, etc.)
+
+#loader
+train_loader = get_data(params)
+#parser
 parser = argparse.ArgumentParser()
-parser.add_argument('-load_path', default='./checkpoint/model_final.pkl', help='Checkpoint to load path from')
-parser.add_argument('-num_output', default=16, help='Number of generated outputs')
-parser.add_argument('-t', default=None, help='Number of glimpses.')
+parser.add_argument('-load_path', default='./checkpoint/model_epoch_final.pkl', help='Checkpoint to load path from')
 args = parser.parse_args()
+
+# Initialize the model.
+
+device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
+params['device'] = device
+
 
 # Load the checkpoint file.
 state_dict = torch.load(args.load_path)
 
 # Get the 'params' dictionary from the loaded state_dict.
-params = state_dict['params']
+params_add = state_dict['params']
+params.update(params_add)
+params['batch_size'] = 4
+model = Final_model(params).to(device)
+model.load_state_dict(state_dict['model'], strict=False)
+step = state_dict['step']
+print('load finished and then get image')
 
-model = Final_model(params)
-model.load_state_dict(state_dict['model'])
-print('\n')
-print(model)
-
-start_time = time.time()
-print('*'*25)
-print("Generating Image...")
-# Generate images.
+# Generate test output.
 with torch.no_grad():
-    x = model.generate(int(args.num_output))
+    generate_image(params['epoch_num'])
 
-time_elapsed = time.time() - start_time
-print('\nDONE!')
-print('Time taken to generate image: %.2fs' % (time_elapsed))
-
-print('\nSaving generated image...')
-fig = plt.figure(figsize=(int(np.sqrt(int(args.num_output)))*2, int(np.sqrt(int(args.num_output)))*2))
-plt.axis("off")
-plt.imshow(np.transpose(vutils.make_grid(
-    x, nrow=int(np.sqrt(int(args.num_output))), padding=1, normalize=True, pad_value=1).cpu(), (1, 2, 0)))
-plt.savefig("Generated_Image")
-plt.close('all')
-
-# Create animation for the generation.
-fig = plt.figure(figsize=(int(np.sqrt(int(args.num_output)))*2, int(np.sqrt(int(args.num_output)))*2))
-plt.axis("off")
-ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in x]
-anim = animation.ArtistAnimation(fig, ims, interval=200, repeat_delay=2000, blit=True)
-anim.save('draw_generate.gif', dpi=1000, writer='pillow')
-print('DONE!')
-print('-'*50)
-plt.show()
