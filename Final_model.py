@@ -30,7 +30,7 @@ class Final_model(nn.Module):
 
 
         self.Draw_model_1 = V.VAE(16, 64, 4096, 300, self.device)
-        self.Draw_model_2 = V.VAE(32, 32, 4096, 300, self.device)
+        self.Draw_model_2 = V.VAE(32, 32, 4096, 200, self.device)
         self.Draw_model_3 = V.VAE(64, 16, 2048, 200, self.device)
         self.Draw_model_4 = V.VAE(128, 8, 1024, 100, self.device)
 
