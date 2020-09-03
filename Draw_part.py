@@ -193,16 +193,16 @@ class DRAWModel(nn.Module):
             h_enc_prev = h_enc
             h_dec_prev = h_dec
 
-        return self.cs[-1].view(self.batch_size, self.channel, self.A, self.B)
+        return torch.sigmoid(self.cs[-1]).view(self.batch_size, self.channel, self.A, self.B)
 
 
     def loss(self, x):
-        self.forward(x)
+        x_recon = self.forward(x)
         #
-        # criterion = nn.MSELoss()
+        criterion = nn.MSELoss()
         # x_recon = torch.sigmoid(self.c_result[-1])
         #
-        # Lx = (criterion(x_recon, x) **2) * self.A * self.B * self.channel
+        Lx = (criterion(x_recon, x) **2) * self.A * self.B * self.channel
         # Latent loss.
         Lz = 0
 
@@ -215,7 +215,6 @@ class DRAWModel(nn.Module):
             Lzsum = Lz + kl_loss
         # print(Lz)
         Lzavg = torch.mean(Lzsum)
-        Lx = 0
         net_loss = Lx + Lzavg
 
         return net_loss
