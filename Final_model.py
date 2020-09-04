@@ -29,9 +29,9 @@ class Final_model(nn.Module):
         # self.Draw_model_4 = D.DRAWModel(4, 8, 8, 128, 6, 6, params)
 
 
-        self.Draw_model_1 = V.VAE(16, 64, 3500, 300, self.device)
-        self.Draw_model_2 = V.VAE(32, 32, 3500, 200, self.device)
-        self.Draw_model_3 = V.VAE(64, 16, 2000, 200, self.device)
+        self.Draw_model_1 = V.VAE(16, 64, 3500, 100, self.device)
+        self.Draw_model_2 = V.VAE(32, 32, 3500, 100, self.device)
+        self.Draw_model_3 = V.VAE(64, 16, 2000, 100, self.device)
         self.Draw_model_4 = V.VAE(128, 8, 1000, 100, self.device)
 
 
