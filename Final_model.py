@@ -23,16 +23,16 @@ class Final_model(nn.Module):
 
         self.OutConv = U.OutConv(16, 3)
         #glimpses, width, heights, channels, read_N, write_N
-        self.Draw_model_1 = D.DRAWModel(16, 64, 64, 16, 6, 6, params)
-        self.Draw_model_2 = D.DRAWModel(16, 32, 32, 32, 6, 6, params)
-        self.Draw_model_3 = D.DRAWModel(16, 16, 16, 64, 6, 6, params)
-        self.Draw_model_4 = D.DRAWModel(4, 8, 8, 128, 6, 6, params)
+        # self.Draw_model_1 = D.DRAWModel(16, 64, 64, 16, 6, 6, params)
+        # self.Draw_model_2 = D.DRAWModel(16, 32, 32, 32, 6, 6, params)
+        # self.Draw_model_3 = D.DRAWModel(16, 16, 16, 64, 6, 6, params)
+        # self.Draw_model_4 = D.DRAWModel(4, 8, 8, 128, 6, 6, params)
 
 
-        # self.Draw_model_1 = V.VAE(16, 64, 3500, 300, self.device)
-        # self.Draw_model_2 = V.VAE(32, 32, 3500, 200, self.device)
-        # self.Draw_model_3 = V.VAE(64, 16, 2000, 200, self.device)
-        # self.Draw_model_4 = V.VAE(128, 8, 1000, 100, self.device)
+        self.Draw_model_1 = V.VAE(16, 64, 3500, 300, self.device)
+        self.Draw_model_2 = V.VAE(32, 32, 3500, 200, self.device)
+        self.Draw_model_3 = V.VAE(64, 16, 2000, 200, self.device)
+        self.Draw_model_4 = V.VAE(128, 8, 1000, 100, self.device)
 
 
 
@@ -40,13 +40,11 @@ class Final_model(nn.Module):
         batch_size = x.size(0)
         x = x.view(batch_size, 3, 64, 64)
         x_out_1 = self.inc(x)
-        # print('x_1 :', x_out_1.size())
         x_out_2 = self.down_1(x_out_1)
         x_out_3 = self.down_2(x_out_2)
         x_out_4 = self.down_3(x_out_3)
 
         x_model_1 = self.Draw_model_1(x_out_1)
-        # print('x_model_1 :', x_model_1.size())
         self.loss_1 = self.Draw_model_1.loss(x_out_1)
         x_model_2 = self.Draw_model_2(x_out_2)
         self.loss_2 = self.Draw_model_2.loss(x_out_2)
@@ -58,9 +56,7 @@ class Final_model(nn.Module):
 
         x_model_out_3 = self.up_1(x_model_4, x_model_3)
         x_model_out_2 = self.up_2(x_model_out_3, x_model_2)
-        # print('x_', x_model_out_2.size())
         x_model_out_1 = self.up_3(x_model_out_2, x_model_1)
-        # print('x_out', x_model_out_1.size())
         self.for_dis = x_model_out_1
         x_model_output = self.OutConv(x_model_out_1)
 
@@ -68,10 +64,11 @@ class Final_model(nn.Module):
 
     def loss(self, x):
         x_recon = self.forward(x)
-        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4 * 8
+        latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
+        print('latent_loss: ', latent_loss)
         criterion = nn.MSELoss()
         recon_loss = (criterion(x_recon, x) * 2) * x_recon.size(-1) *100
-
+        print('recon_loss: ', recon_loss)
 
         return latent_loss + recon_loss
 
