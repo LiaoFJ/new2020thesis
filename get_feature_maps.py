@@ -39,23 +39,28 @@ args = parser.parse_args()
 
 if args.use_gpu == 'True':
     device = torch.device("cuda:0" if(torch.cuda.is_available()) else "cpu")
-    model = Final_model(params).to(device)
-    model = nn.DataParallel(model.cuda())
+    params['device'] = device
+
 else:
     device = torch.device("cpu")
-params['device'] = device
+    params['device'] = device
+
 
 #go on training
-print(device, " will be used.\n")
 
 if args.load_if == 'True':
+
     # Load the checkpoint file.
-    print('load_path is:', args.load_path)
     state_dict = torch.load(args.load_path)
+
     # Get the 'params' dictionary from the loaded state_dict.
-    params = state_dict['params']
-    model = Final_model_re(params).to(device)
-    model.load_state_dict(state_dict['model'])
+    params_add = state_dict['params']
+    params.update(params_add)
+    params['batch_size'] = 4
+    model = Final_model(params).to(device)
+    model = nn.DataParallel(model.cuda())
+    model.load_state_dict(state_dict['model'], strict=False)
+
     step = state_dict['step']
     print('load finished and then train')
 else:
