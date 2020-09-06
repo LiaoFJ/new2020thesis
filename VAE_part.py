@@ -52,7 +52,7 @@ class VAE(nn.Module):
         recon_x = self.forward(x)
         BCE = F.binary_cross_entropy(recon_x, x.detach(), reduction='sum')
         KLD = -0.5 * torch.sum(1 + self.logvar - self.mu.pow(2) - self.logvar.exp())
-        print('BCE: ', BCE, 'KLD: ', KLD)
+        # print('BCE: ', BCE, 'KLD: ', KLD)
         return BCE + KLD
 
     def generate(self, num_out):
