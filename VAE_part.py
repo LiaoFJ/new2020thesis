@@ -50,6 +50,8 @@ class VAE(nn.Module):
 
     def loss(self, x):
         recon_x = self.forward(x)
+        recon_x = recon_x.view(recon_x.size(0), -1)
+        x = x.view(x.size(0), -1)
         BCE = F.binary_cross_entropy(recon_x, x.detach(), reduction='sum')
         KLD = -0.5 * torch.sum(1 + self.logvar - self.mu.pow(2) - self.logvar.exp())
         # print('BCE: ', BCE, 'KLD: ', KLD)
