@@ -161,7 +161,7 @@ for epoch in range(params['epoch_num']):
             'params': params,
             'step': epoch,
             'params_loss': losses
-        }, 'checkpoint/model_epoch_{}_se.pkl'.format(epoch + 1 + step))
+        }, 'checkpoint/model_epoch_{}_se_new.pkl'.format(epoch + 1 + step))
 
         # with torch.no_grad():
         #     generate_image(epoch + 1)
@@ -177,7 +177,7 @@ torch.save({
     'params': params,
     'step': params['epoch_num'],
     'params_loss': losses
-}, 'checkpoint/model_final.pkl'.format(epoch))
+}, 'checkpoint/model_final_new.pkl'.format(epoch))
 
 # Generate test output.
 with torch.no_grad():
