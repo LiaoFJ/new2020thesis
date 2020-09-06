@@ -63,14 +63,14 @@ class Final_model(nn.Module):
         return torch.sigmoid(x_model_output)
 
     def loss(self, x):
-        x_recon = self.forward(x)
+        # x_recon = self.forward(x)
         latent_loss = self.loss_1 + self.loss_2 + self. loss_3 + self.loss_4
-        print('latent_loss: ', latent_loss)
-        criterion = nn.MSELoss()
-        recon_loss = (criterion(x_recon, x) * 2) * x_recon.size(-1) *100
-        print('recon_loss: ', recon_loss)
+        # print('latent_loss: ', latent_loss)
+        # criterion = nn.MSELoss()
+        # recon_loss = (criterion(x_recon, x) * 2) * x_recon.size(-1) * 100
+        # print('recon_loss: ', recon_loss)
 
-        return latent_loss + recon_loss
+        return latent_loss # + recon_loss
 
     def recon_los(self, x):
         x_recon = self.forward(x)
